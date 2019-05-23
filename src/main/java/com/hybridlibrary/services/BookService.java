@@ -1,46 +1,20 @@
 package com.hybridlibrary.services;
 
-import com.hybridlibrary.repositories.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import com.hybridlibrary.models.Book;
 
 import java.util.Collection;
 
-@Service
-public class BookService {
 
-    @Autowired
-    private BookRepository bookRepository;
+public interface BookService extends AbstractService<Book, Long>{
 
-    public Collection<Book> getAllBooks(){
-        return bookRepository.findAll();
-    }
+    Collection<Book> findAll();
+    Book getOne(Long id);
+    Collection<Book> getByTitle(String title);
+    Collection<Book> getByAuthor(String author);
+    Book update(Book book);
+    Book create(Book book);
+    void delete(Long id);
+    boolean existById(Long id);
 
-    public Book getBook(Integer id){
-        return bookRepository.getOne(id);
-    }
 
-    public Collection<Book> getBookByName(String name){
-        return bookRepository.findByNameContainingIgnoreCase(name);
-    }
-    public Collection<Book> getBookByAuthor(String author){
-        return bookRepository.findByAuthorContainingIgnoreCase(author);
-    }
-
-    public Book updateBook(Book book){
-        bookRepository.save(book);
-        return book;
-    }
-    public Book createBook(Book book){
-        bookRepository.save(book);
-        return book;
-    }
-    public void deleteBook(Integer id){
-        bookRepository.deleteById(id);
-    }
-    public boolean existById(Integer id){
-        return bookRepository.existsById(id);
-    }
 }

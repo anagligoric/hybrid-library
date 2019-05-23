@@ -4,6 +4,7 @@ package com.hybridlibrary.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
 import javax.persistence.*;
@@ -11,26 +12,22 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name = "book")
 @Data
-//@JsonIgnoreProperties({"hibernateLazyInitalizer", "handler"})
-public class Book implements Serializable {
-    @Id
-    @SequenceGenerator(name="BOOK_ID_GENERATOR", sequenceName = "BOOK_SEQ", allocationSize = 1)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="BOOK_ID_GENERATOR")
-    private Integer id;
+@EqualsAndHashCode(callSuper = true)
+public class Book extends AbstractModel implements Serializable {
 
-    @Column(name="name")
-    private String name;
 
-    @Column(name = "author")
+    @Column
+    private String title;
+
+    @Column
     private String author;
 
-    @Column (name = "language")
+    @Column
     private String language;
 
-    @Column (name = "rentPeriod")
-    private int rentPeriod;
+    @Column
+    private Integer rentPeriod;
 
     @JsonIgnore
     @OneToMany(mappedBy="book")

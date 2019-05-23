@@ -1,6 +1,7 @@
 package com.hybridlibrary.controllers;
 
 import com.hybridlibrary.services.BookService;
+import com.hybridlibrary.services.serviceImpl.BookServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +15,12 @@ import java.util.Collection;
 public class BookRestController {
 
     @Autowired
-    private BookService bookService;
+    private BookServiceImpl bookService;
 
     @GetMapping("book")
     public ResponseEntity<?> getBooks(){
 
-        Collection<Book> books = bookService.getAllBooks();
+        Collection<Book> books = bookService.findAll();
         if(!books.isEmpty()) {
 
             return ResponseEntity.ok(books);
@@ -34,9 +35,9 @@ public class BookRestController {
     }
 
     @GetMapping("book/{id}")
-    public ResponseEntity<Book> getBookById(@PathVariable("id") Integer id){
+    public ResponseEntity<Book> getBookById(@PathVariable("id") Long id){
 
-        Book book = bookService.getBook(id);
+        Book book = bookService.getOne(id);
         //if(!book.getId())
 
         return ResponseEntity.ok(book);
@@ -45,7 +46,7 @@ public class BookRestController {
     @GetMapping("bookName/{name}")
     public ResponseEntity<?> getBookByName(@PathVariable("name") String name){
 
-        Collection<Book> books = bookService.getBookByName(name);
+        Collection<Book> books = bookService.getByTitle(name);
 
         if(!books.isEmpty()) {
 
@@ -61,7 +62,7 @@ public class BookRestController {
     @GetMapping("bookAuthor/{author}")
     public ResponseEntity<?> getBookByAuthor(@PathVariable("author") String author){
 
-        Collection<Book> books = bookService.getBookByAuthor(author);
+        Collection<Book> books = bookService.getByAuthor(author);
 
         if(!books.isEmpty()) {
 
@@ -74,12 +75,12 @@ public class BookRestController {
         }
     }
     @DeleteMapping(value = "book/{id}")
-        public ResponseEntity<Void> deleteBook(@PathVariable ("id") Integer id){
+        public ResponseEntity<Void> deleteBook(@PathVariable ("id") Long id){
 
         if(!bookService.existById(id)){
             return ResponseEntity.noContent().build();
         }else{
-            bookService.deleteBook(id);
+            bookService.delete(id);
             return ResponseEntity.ok().build();
         }
     }
@@ -87,7 +88,7 @@ public class BookRestController {
     @PostMapping(value = "book")
     public ResponseEntity<Book> createBook (@RequestBody Book book){
         if(!bookService.existById(book.getId())){
-            bookService.createBook(book);
+            bookService.create(book);
             return ResponseEntity.ok(book);
         }else{
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -98,7 +99,7 @@ public class BookRestController {
         if(!bookService.existById(book.getId())){
             return ResponseEntity.noContent().build();
         }else{
-            bookService.updateBook(book);
+            bookService.update(book);
             return ResponseEntity.ok(book);
         }
     }

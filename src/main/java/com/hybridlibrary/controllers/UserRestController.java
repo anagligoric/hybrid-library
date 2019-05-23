@@ -2,7 +2,7 @@ package com.hybridlibrary.controllers;
 
 
 import com.hybridlibrary.models.User;
-import com.hybridlibrary.services.UserService;
+import com.hybridlibrary.services.serviceImpl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +13,11 @@ import java.util.Collection;
 public class UserRestController {
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
 
     @GetMapping("user")
     public ResponseEntity<Collection<User>> getUsers(){
-        Collection<User> users = userService.getAllUsers();
+        Collection<User> users = userServiceImpl.findAll();
         if(users.isEmpty()){
             return ResponseEntity.noContent().build();
         }else{
@@ -26,18 +26,18 @@ public class UserRestController {
     }
 
     @GetMapping("user/{id}")
-    public ResponseEntity<User> getUser(@PathVariable ("id") Integer id){
+    public ResponseEntity<User> getUser(@PathVariable ("id") Long id){
         //User user =
-        if(!userService.existById(id)){
+        if(!userServiceImpl.existById(id)){
             return ResponseEntity.noContent().build();
         }else{
-            return ResponseEntity.ok(userService.getUser(id));
+            return ResponseEntity.ok(userServiceImpl.getOne(id));
         }
     }
 
     @GetMapping("username/{username}")
     public ResponseEntity<Collection<User>> getUserByUsername(@PathVariable ("username") String username){
-        Collection<User> users = userService.getUserByUsername(username);
+        Collection<User> users = userServiceImpl.getByUsername(username);
         if(users.isEmpty()){
             return ResponseEntity.noContent().build();
         }else{
@@ -46,30 +46,30 @@ public class UserRestController {
 
     }
     @DeleteMapping(value = "user")
-    public ResponseEntity<Void> deleteUser(@PathVariable("id") Integer id){
-        if(!userService.existById(id)){
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id){
+        if(!userServiceImpl.existById(id)){
             return ResponseEntity.noContent().build();
         }else{
-            userService.deleteUser(id);
+            userServiceImpl.delete(id);
             return ResponseEntity.ok().build();
         }
     }
     @PostMapping(value="user")
     public ResponseEntity<User> createUser(@RequestBody User user){
-        if(userService.existById(user.getId())){
+        if(userServiceImpl.existById(user.getId())){
             return ResponseEntity.noContent().build();
         }else{
-            userService.createUser(user);
+            userServiceImpl.create(user);
             return ResponseEntity.ok(user);
         }
 
     }
     @PutMapping(value="user")
     public ResponseEntity<User> updateUser(@RequestBody User user){
-        if(!userService.existById(user.getId())){
+        if(!userServiceImpl.existById(user.getId())){
             return ResponseEntity.noContent().build();
         }else{
-            userService.updateUser(user);
+            userServiceImpl.update(user);
             return ResponseEntity.ok(user);
         }
 

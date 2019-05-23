@@ -1,20 +1,23 @@
 package com.hybridlibrary.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
-@Table(name = "bookCopy")
 @Data
-public class BookCopy implements Serializable {
-    @Id
-    @SequenceGenerator(name="BOOK_COPY_ID_GENERATOR", sequenceName = "BOOK_COPY_SEQ", allocationSize = 1)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="BOOK_COPY_ID_GENERATOR")
-    private Integer id;
+@EqualsAndHashCode(callSuper = true)
+public class BookCopy extends AbstractModel  implements Serializable {
 
     @ManyToOne
-    @JoinColumn(name="book")
+    @JoinColumn
     private Book book;
+
+    @JsonIgnore
+    @OneToMany(mappedBy="bookCopy")
+    private List<BookRental> bookRentals;
 }

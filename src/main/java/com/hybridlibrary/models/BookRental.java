@@ -1,16 +1,29 @@
 package com.hybridlibrary.models;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
-public class BookRental {
+@Entity
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class BookRental extends AbstractModel implements Serializable {
 
-    @Id
-    @SequenceGenerator(name="BOOK_ID_GENERATOR", sequenceName = "BOOK_SEQ")
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="BOOK_ID_GENERATOR")
-    private Integer id;
+    @ManyToOne
+    @JoinColumn
+    private User user;
 
+    @ManyToOne
+    @JoinColumn
+    private BookCopy bookCopy;
 
+    @Temporal(TemporalType.DATE)
+    private Date rentDate;
 
-
-
+    @Temporal(TemporalType.DATE)
+    private Date returnDate;
 }
