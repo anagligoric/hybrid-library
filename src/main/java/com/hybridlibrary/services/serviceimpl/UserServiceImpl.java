@@ -1,4 +1,4 @@
-package com.hybridlibrary.services.serviceImpl;
+package com.hybridlibrary.services.serviceimpl;
 
 import com.hybridlibrary.models.User;
 import com.hybridlibrary.repositories.UserRepository;
@@ -37,9 +37,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(User user) {
-        //user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-        return user;
+
+        User  newUser = userRepository.save(user);
+        return newUser;
     }
 
     @Override

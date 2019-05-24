@@ -1,4 +1,4 @@
-package com.hybridlibrary.services.serviceImpl;
+package com.hybridlibrary.services.serviceimpl;
 
 import com.hybridlibrary.models.BookCopy;
 import com.hybridlibrary.repositories.BookCopyRepository;
@@ -42,8 +42,8 @@ public class BookCopyServiceImpl implements BookCopyService {
 
     @Override
     public BookCopy create(BookCopy bookCopy) {
-        bookCopyRepository.save(bookCopy);
-        return bookCopy;
+        BookCopy newBookCopy = bookCopyRepository.save(bookCopy);
+        return newBookCopy;
     }
 
     @Override

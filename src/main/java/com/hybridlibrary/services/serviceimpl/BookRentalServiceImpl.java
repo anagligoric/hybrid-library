@@ -1,4 +1,4 @@
-package com.hybridlibrary.services.serviceImpl;
+package com.hybridlibrary.services.serviceimpl;
 
 import com.hybridlibrary.models.BookRental;
 import com.hybridlibrary.repositories.BookRentalRepository;

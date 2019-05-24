@@ -1,4 +1,4 @@
-package com.hybridlibrary.services.serviceImpl;
+package com.hybridlibrary.services.serviceimpl;
 
 import com.hybridlibrary.models.Book;
 import com.hybridlibrary.repositories.BookRepository;
@@ -44,8 +44,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book create(Book book) {
-        bookRepository.save(book);
-        return book;
+        Book newBook = bookRepository.save(book);
+        return newBook;
     }
 
     @Override
