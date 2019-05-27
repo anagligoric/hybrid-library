@@ -11,13 +11,13 @@ import java.util.List;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class BookCopy extends AbstractModel  implements Serializable {
+public class BookCopy extends AbstractModel implements Serializable {
 
     @ManyToOne
     @JoinColumn
     private Book book;
 
     @JsonIgnore
-    @OneToMany(mappedBy="bookCopy")
+    @OneToMany(mappedBy = "bookCopy")
     private List<BookRental> bookRentals;
 }

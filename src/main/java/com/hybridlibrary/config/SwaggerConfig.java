@@ -1,4 +1,4 @@
-package com.hybridlibrary;
+package com.hybridlibrary.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

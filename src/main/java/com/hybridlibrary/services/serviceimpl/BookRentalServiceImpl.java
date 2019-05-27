@@ -39,11 +39,11 @@ public class BookRentalServiceImpl implements BookRentalService {
     public void delete(Long id) {
         bookRentalRepository.deleteById(id);
     }
+
     @Override
     public boolean existById(Long id) {
         return bookRentalRepository.existsById(id);
     }
-
 
 
 }

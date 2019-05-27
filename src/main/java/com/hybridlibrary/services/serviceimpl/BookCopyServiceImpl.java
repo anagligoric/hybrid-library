@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hybridlibrary.models.Book;
+
 import java.util.Collection;
 
 @Service
@@ -57,7 +58,7 @@ public class BookCopyServiceImpl implements BookCopyService {
     }
 
 
-    public Integer getCopiesCount(Long id){
+    public Integer getCopiesCount(Long id) {
         Book book = bookRepository.getOne(id);
         return bookCopyRepository.countByBook(book);
     }

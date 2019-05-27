@@ -6,6 +6,9 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,23 +20,27 @@ public class User extends AbstractModel implements Serializable {
 
 
     @Column
+    @NotBlank
     private String firstName;
 
     @Column
+    @NotBlank
     private String lastName;
 
     @Column
+    @Email(message = "Email should be valid")
     private String email;
 
     @Column
+    @NotBlank
     private String username;
 
-
     @Column
+    @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
 
     @JsonIgnore
-    @OneToMany(mappedBy="bookCopy")
+    @OneToMany(mappedBy = "bookCopy")
     private List<BookRental> bookRentals;
 
 }
