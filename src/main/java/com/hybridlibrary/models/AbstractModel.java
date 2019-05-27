@@ -1,7 +1,7 @@
 package com.hybridlibrary.models;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,6 +14,4 @@ public abstract class AbstractModel {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     protected Long id;
-
-
 }

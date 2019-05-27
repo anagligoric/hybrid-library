@@ -25,26 +25,25 @@ public class BookRentalServiceImpl implements BookRentalService {
 
     @Override
     public BookRental update(BookRental book) {
-        return null;
+        bookRentalRepository.save(book);
+        return book;
     }
 
     @Override
     public BookRental create(BookRental book) {
-        return null;
+        BookRental newBookRental = bookRentalRepository.save(book);
+        return newBookRental;
     }
 
     @Override
     public void delete(Long id) {
-
+        bookRentalRepository.deleteById(id);
     }
-
     @Override
     public boolean existById(Long id) {
-        return false;
+        return bookRentalRepository.existsById(id);
     }
-    /*public HashMap<String, Integer> mostRentedBook(){
-        //return bookRentalRepository.mostRentedBooks();
-    }*/
+
 
 
 }

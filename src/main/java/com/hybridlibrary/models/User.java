@@ -15,8 +15,19 @@ import java.util.List;
 public class User extends AbstractModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
+
+    @Column
+    private String firstName;
+
+    @Column
+    private String lastName;
+
+    @Column
+    private String email;
+
     @Column
     private String username;
+
 
     @Column
     private String password;
