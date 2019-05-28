@@ -34,9 +34,10 @@ public class UserRestController {
         if (users.isEmpty()) {
             return ResponseEntity.noContent().build();
         } else {
-            Iterator<User> it = users.iterator();
-            while (it.hasNext()) {
-                userList.add(conversionService.convert(it.next(), UserDto.class));
+            for (User user :
+                    users) {
+                userList.add(conversionService.convert(user, UserDto.class));
+
             }
             log.info("Users fetched.");
 
@@ -62,9 +63,10 @@ public class UserRestController {
         if (users.isEmpty()) {
             return ResponseEntity.noContent().build();
         } else {
-            Iterator<User> it = users.iterator();
-            while (it.hasNext()) {
-                userList.add(conversionService.convert(it.next(), UserDto.class));
+            for (User user :
+                    users) {
+                userList.add(conversionService.convert(user, UserDto.class));
+
             }
             log.info("Users which username contains '{}' are listed.", username);
 
@@ -79,7 +81,6 @@ public class UserRestController {
             UserDto userDto = conversionService.convert(userService.getOne(id), UserDto.class);
             userService.delete(id);
             log.info("User with id {} is deleted.", id);
-
             return ResponseEntity.ok(userDto);
         } else {
             return ResponseEntity.noContent().build();

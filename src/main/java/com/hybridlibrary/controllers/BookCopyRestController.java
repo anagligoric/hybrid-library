@@ -1,7 +1,6 @@
 package com.hybridlibrary.controllers;
 
 import com.hybridlibrary.dtos.BookCopyDto;
-import com.hybridlibrary.dtos.BookDto;
 import com.hybridlibrary.models.BookCopy;
 import com.hybridlibrary.services.BookCopyService;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 @RestController
@@ -34,9 +32,9 @@ public class BookCopyRestController {
             return ResponseEntity.noContent().build();
 
         } else {
-            Iterator<BookCopy> it = bookCopies.iterator();
-            while (it.hasNext()) {
-                bookCopyList.add(conversionService.convert(it.next(), BookCopyDto.class));
+            for (BookCopy bookCopy :
+                    bookCopies) {
+                bookCopyList.add(conversionService.convert(bookCopy, BookCopyDto.class));
             }
             log.info("Book copies fetched");
 
@@ -65,9 +63,10 @@ public class BookCopyRestController {
             return ResponseEntity.noContent().build();
 
         } else {
-            Iterator<BookCopy> it = bookCopies.iterator();
-            while (it.hasNext()) {
-                bookCopyList.add(conversionService.convert(it.next(), BookCopyDto.class));
+            for (BookCopy bookCopy :
+                    bookCopies) {
+                bookCopyList.add(conversionService.convert(bookCopy, BookCopyDto.class));
+
             }
             log.info("Copies od the book with id {} are listed.", id);
             return ResponseEntity.ok(bookCopyList);
@@ -79,6 +78,7 @@ public class BookCopyRestController {
 
         if (bookCopyService.existById(id)) {
             BookCopy bookCopy = bookCopyService.getOne(id);
+
             BookCopyDto bookCopyDto = conversionService.convert(bookCopy, BookCopyDto.class);
             bookCopyService.delete(id);
             log.info("Book copy with id {} is deleted.", id);
@@ -91,18 +91,30 @@ public class BookCopyRestController {
     @PostMapping(value = "bookcopy")
     public ResponseEntity<BookCopyDto> create(@RequestBody BookCopyDto bookCopyDto) {
         try {
-
             BookCopy bookCopy = conversionService.convert(bookCopyDto, BookCopy.class);
+
+            bookCopyService.assignBook(bookCopy, bookCopyDto.getBookId());
             bookCopyService.create(bookCopy);
+            bookCopy.setUser(null);
+            bookCopy.setRentDate(null);
+            bookCopy.setRented(false);
+
             return ResponseEntity.ok(bookCopyDto);
         } catch (ConstraintViolationException e) {
             log.error("Error occurred {}", e.toString(), e);
             return ResponseEntity.badRequest().build();
         }
 
-
     }
 
+    @PutMapping(value = "rentbookcopy")
+    public ResponseEntity<BookCopyDto> rentBookCopy(@RequestBody BookCopy bookCopy){
+        return null;
+    }
+    @PutMapping(value = "returnbookcopy")
+    public ResponseEntity<BookCopyDto> returnBookCopy(@RequestBody BookCopy bookCopy){
+        return null;
+    }
     @PutMapping(value = "bookcopy")
     public ResponseEntity<BookCopyDto> update(@RequestBody BookCopy bookCopy) {
         try {

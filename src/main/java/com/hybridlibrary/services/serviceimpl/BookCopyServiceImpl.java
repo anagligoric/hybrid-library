@@ -1,13 +1,12 @@
 package com.hybridlibrary.services.serviceimpl;
 
+import com.hybridlibrary.models.Book;
 import com.hybridlibrary.models.BookCopy;
 import com.hybridlibrary.repositories.BookCopyRepository;
 import com.hybridlibrary.repositories.BookRepository;
 import com.hybridlibrary.services.BookCopyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.hybridlibrary.models.Book;
 
 import java.util.Collection;
 
@@ -43,8 +42,7 @@ public class BookCopyServiceImpl implements BookCopyService {
 
     @Override
     public BookCopy create(BookCopy bookCopy) {
-        BookCopy newBookCopy = bookCopyRepository.save(bookCopy);
-        return newBookCopy;
+        return bookCopyRepository.save(bookCopy);
     }
 
     @Override
@@ -58,8 +56,13 @@ public class BookCopyServiceImpl implements BookCopyService {
     }
 
 
-    public Integer getCopiesCount(Long id) {
+    public Long getCopiesCount(Long id) {
         Book book = bookRepository.getOne(id);
         return bookCopyRepository.countByBook(book);
+    }
+
+    public void assignBook(BookCopy bookCopy, Long bookId){
+        Book book = bookRepository.getOne(bookId);
+        bookCopy.setBook(book);
     }
 }

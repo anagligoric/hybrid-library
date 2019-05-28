@@ -11,4 +11,6 @@ public interface BookRentalRepository extends JpaRepository<BookRental, Long> {
 
     Collection<BookRental> getByBookCopy(BookCopy bookCopy);
 
+    Integer countByBookCopy(BookCopy bookCopy);
+
 }

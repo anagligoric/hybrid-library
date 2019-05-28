@@ -14,10 +14,13 @@ import org.springframework.core.convert.converter.GenericConverter;
 
 import java.util.Set;
 
+
 public class GenericModelConverter implements GenericConverter {
+
+
     @Override
     public Set<ConvertiblePair> getConvertibleTypes() {
-        ConvertiblePair[] pairs = new ConvertiblePair[] {
+        ConvertiblePair[] pairs = new ConvertiblePair[]{
                 new ConvertiblePair(Book.class, BookDto.class),
                 new ConvertiblePair(BookDto.class, Book.class),
                 new ConvertiblePair(BookCopy.class, BookCopyDto.class),
@@ -31,28 +34,29 @@ public class GenericModelConverter implements GenericConverter {
 
     @Override
     public Object convert(Object o, TypeDescriptor sourceType, TypeDescriptor targetType) {
-        if(o instanceof Book){
+        if (o instanceof Book) {
             return convertBook(o);
-        }else if(o instanceof BookDto){
+        } else if (o instanceof BookDto) {
             return convertBookDto(o);
-        }else if(o instanceof  BookCopy){
+        } else if (o instanceof BookCopy) {
             return convertBookCopy(o);
-        }else if(o instanceof  BookCopyDto){
+        } else if (o instanceof BookCopyDto) {
             return convertBookCopyDto(o);
-        }else if(o instanceof BookRental){
+        } else if (o instanceof BookRental) {
             return convertBookRental(o);
-        }else if(o instanceof  BookRentalDto){
+        } else if (o instanceof BookRentalDto) {
             return convertBookRentalDto(o);
-        }else if(o instanceof User){
+        } else if (o instanceof User) {
             return convertUser(o);
-        }else if(o instanceof UserDto){
+        } else if (o instanceof UserDto) {
             return convertUserDto(o);
-        }else{
+        } else {
             return null;
         }
     }
-    private static BookDto convertBook(Object o){
-        Book book = (Book)o;
+
+    private static BookDto convertBook(Object o) {
+        Book book = (Book) o;
         BookDto bookDto = new BookDto();
         bookDto.setAuthor(book.getAuthor());
         bookDto.setLanguage(book.getLanguage());
@@ -60,8 +64,9 @@ public class GenericModelConverter implements GenericConverter {
         bookDto.setTitle(book.getTitle());
         return bookDto;
     }
-    private static Book convertBookDto(Object o){
-        BookDto bookDto = (BookDto)o;
+
+    private static Book convertBookDto(Object o) {
+        BookDto bookDto = (BookDto) o;
         Book book = new Book();
         book.setAuthor(bookDto.getAuthor());
         book.setLanguage(bookDto.getLanguage());
@@ -69,38 +74,46 @@ public class GenericModelConverter implements GenericConverter {
         book.setTitle(bookDto.getTitle());
         return book;
     }
-    private static BookCopyDto convertBookCopy(Object o){
-        BookCopy bookCopy = (BookCopy)o;
-        BookCopyDto bookCopyDto = new BookCopyDto();
-        bookCopyDto.setBook(bookCopy.getBook());
+
+    private static BookCopyDto convertBookCopy(Object o) {
+        BookCopy bookCopy = (BookCopy) o;
+        BookCopyDto bookCopyDto = BookCopyDto.builder()
+                .bookId(bookCopy.getBook().getId()).build();
+        bookCopyDto.setRented(bookCopy.getRented());
+        bookCopyDto.setRentDate(bookCopy.getRentDate());
+        bookCopyDto.setUser(bookCopy.getUser());
+
         return bookCopyDto;
     }
-    private static BookCopy convertBookCopyDto(Object o){
-        BookCopyDto bookCopyDto = (BookCopyDto)o;
-        BookCopy bookCopy = new BookCopy();
-        bookCopy.setBook(bookCopyDto.getBook());
+
+    private static BookCopy convertBookCopyDto(Object o) {
+        BookCopyDto bookCopyDto = (BookCopyDto) o;
+        BookCopy bookCopy = BookCopy.builder()
+                .rentDate(bookCopyDto.getRentDate()).rented(bookCopyDto.isRented()).user(bookCopyDto.getUser()).build();
+
         return bookCopy;
     }
-    private static BookRentalDto convertBookRental(Object o){
-        BookRental bookRental = (BookRental)o;
+
+    private static BookRentalDto convertBookRental(Object o) {
+        BookRental bookRental = (BookRental) o;
         BookRentalDto bookRentalDto = new BookRentalDto();
-        bookRentalDto.setUser(bookRental.getUser());
         bookRentalDto.setBookCopy(bookRental.getBookCopy());
         bookRentalDto.setRentDate(bookRental.getRentDate());
         bookRentalDto.setReturnDate(bookRental.getReturnDate());
         return bookRentalDto;
     }
-    private static BookRental convertBookRentalDto(Object o){
-        BookRentalDto bookRentalDto = (BookRentalDto)o;
-        BookRental bookRental= new BookRental();
-        bookRental.setUser(bookRentalDto.getUser());
+
+    private static BookRental convertBookRentalDto(Object o) {
+        BookRentalDto bookRentalDto = (BookRentalDto) o;
+        BookRental bookRental = new BookRental();
         bookRental.setBookCopy(bookRentalDto.getBookCopy());
         bookRental.setRentDate(bookRentalDto.getRentDate());
         bookRental.setReturnDate(bookRentalDto.getReturnDate());
         return bookRental;
     }
-    private static UserDto convertUser(Object o){
-        User user = (User)o;
+
+    private static UserDto convertUser(Object o) {
+        User user = (User) o;
         UserDto userDto = new UserDto();
         userDto.setFirstName(user.getFirstName());
         userDto.setLastName(user.getLastName());
@@ -108,9 +121,10 @@ public class GenericModelConverter implements GenericConverter {
         userDto.setUsername(user.getUsername());
         return userDto;
     }
-    private static User convertUserDto(Object o){
-        UserDto userDto = (UserDto)o;
-        User user= new User();
+
+    private static User convertUserDto(Object o) {
+        UserDto userDto = (UserDto) o;
+        User user = new User();
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setEmail(userDto.getEmail());

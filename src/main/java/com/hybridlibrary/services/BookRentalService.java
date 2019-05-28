@@ -2,7 +2,6 @@ package com.hybridlibrary.services;
 
 import com.hybridlibrary.models.BookRental;
 
-
 import java.util.Collection;
 
 public interface BookRentalService extends AbstractService<BookRental, Long> {
@@ -14,9 +13,12 @@ public interface BookRentalService extends AbstractService<BookRental, Long> {
     BookRental update(BookRental book);
 
     BookRental create(BookRental book);
-
     void delete(Long id);
 
     boolean existById(Long id);
+
+    Collection<BookRental> getByBookCopy(Long id);
+
+    Integer countByBookCopy(Long id);
 
 }

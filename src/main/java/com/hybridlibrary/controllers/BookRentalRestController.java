@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 @Slf4j
@@ -33,14 +32,34 @@ public class BookRentalRestController {
         if (CollectionUtils.isEmpty(bookRentals)) {
             return ResponseEntity.noContent().build();
         } else {
-            Iterator<BookRental> it = bookRentals.iterator();
-            while (it.hasNext()) {
-                bookRentalList.add(conversionService.convert(it.next(), BookRentalDto.class));
+            for (BookRental bookRental :
+                    bookRentals) {
+                bookRentalList.add(conversionService.convert(bookRental, BookRentalDto.class));
+
             }
             log.info("Book rentals fetched");
 
             return ResponseEntity.ok(bookRentalList);
         }
+    }
+
+    @GetMapping("bookrentalbybookcopy/{id}")
+    public ResponseEntity<List<BookRentalDto>> getByBookCopy(@PathVariable("id") Long id) {
+        Collection<BookRental> bookRentals = bookRentalService.getByBookCopy(id);
+        List<BookRentalDto> bookRentalList = new ArrayList<>();
+        if (CollectionUtils.isEmpty(bookRentals)) {
+            return ResponseEntity.noContent().build();
+
+        } else {
+            for (BookRental bookRental :
+                    bookRentals) {
+                bookRentalList.add(conversionService.convert(bookRental, BookRentalDto.class));
+
+            }
+            log.info("Rentals of the book copy with id {} are listed.", id);
+            return ResponseEntity.ok(bookRentalList);
+        }
+
     }
 
     @GetMapping("bookrental/{id}")

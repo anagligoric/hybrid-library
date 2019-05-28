@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 @RestController
@@ -37,9 +36,9 @@ public class BookRestController {
         if (CollectionUtils.isEmpty(books)) {
             return ResponseEntity.noContent().build();
         } else {
-            Iterator<Book> it = books.iterator();
-            while (it.hasNext()) {
-                bookList.add(conversionService.convert(it.next(), BookDto.class));
+            for (Book book :
+                    books) {
+                bookList.add(conversionService.convert(book, BookDto.class));
             }
             log.info("Books fetched");
 
@@ -73,9 +72,9 @@ public class BookRestController {
         if (CollectionUtils.isEmpty(books)) {
             return ResponseEntity.noContent().build();
         } else {
-            Iterator<Book> it = books.iterator();
-            while (it.hasNext()) {
-                bookList.add(conversionService.convert(it.next(), BookDto.class));
+            for (Book book :
+                    books) {
+                bookList.add(conversionService.convert(book, BookDto.class));
             }
             log.info("Books which title contains '{}' are listed.", title);
             return ResponseEntity.ok(bookList);
@@ -93,9 +92,9 @@ public class BookRestController {
         if (CollectionUtils.isEmpty(books)) {
             return ResponseEntity.noContent().build();
         } else {
-            Iterator<Book> it = books.iterator();
-            while (it.hasNext()) {
-                bookList.add(conversionService.convert(it.next(), BookDto.class));
+            for (Book book :
+                    books) {
+                bookList.add(conversionService.convert(book, BookDto.class));
             }
             log.info("Books which author contains '{}' are listed.", author);
             return ResponseEntity.ok(bookList);
@@ -105,14 +104,13 @@ public class BookRestController {
 
     @DeleteMapping(value = "book/{id}")
     public ResponseEntity<BookDto> delete(@PathVariable("id") Long id) {
-
         if (bookService.existById(id)) {
             Book book = bookService.getOne(id);
             BookDto bookDto = conversionService.convert(book, BookDto.class);
             bookService.delete(id);
+            log.info("Book with id {} is deleted.", id);
             return ResponseEntity.ok(bookDto);
         } else {
-            log.info("Book with id {} is deleted.", id);
             return ResponseEntity.noContent().build();
         }
     }

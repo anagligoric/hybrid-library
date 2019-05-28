@@ -11,6 +11,6 @@ import java.util.Collection;
 public interface BookCopyRepository extends JpaRepository<BookCopy, Long> {
     Collection<BookCopy> findByBook(Book book);
 
-    Integer countByBook(Book book);
+    Long countByBook(Book book);
 }
 

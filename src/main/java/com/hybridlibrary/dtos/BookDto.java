@@ -5,9 +5,9 @@ import lombok.Data;
 @Data
 public class BookDto {
 
-    String title;
-    String author;
-    String language;
-    Integer rentPeriod;
+   private String title;
+   private String author;
+   private String language;
+   private Integer rentPeriod;
 
 }

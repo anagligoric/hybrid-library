@@ -40,7 +40,9 @@ public class User extends AbstractModel implements Serializable {
     private String password;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "bookCopy")
-    private List<BookRental> bookRentals;
+    @OneToMany(mappedBy = "user")
+    private List<BookCopy> bookCopies;
+
+
 
 }

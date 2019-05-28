@@ -15,10 +15,6 @@ public class BookRental extends AbstractModel implements Serializable {
 
     @ManyToOne
     @JoinColumn
-    private User user;
-
-    @ManyToOne
-    @JoinColumn
     private BookCopy bookCopy;
 
     @FutureOrPresent(message = "Rent date can not be in the past")

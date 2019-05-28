@@ -19,6 +19,8 @@ import java.util.List;
 public class Book extends AbstractModel implements Serializable {
 
 
+
+
     @Column
     @NotBlank(message = "Book title can not be blank")
     private String title;

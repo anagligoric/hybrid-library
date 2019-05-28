@@ -20,5 +20,6 @@ public interface BookCopyService extends AbstractService<BookCopy, Long> {
 
     boolean existById(Long id);
 
+    void assignBook(BookCopy bookCopy, Long id);
 
 }
