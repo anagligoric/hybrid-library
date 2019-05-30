@@ -2,8 +2,7 @@ package com.hybridlibrary.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,11 +13,13 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Book extends AbstractModel implements Serializable {
-
-
 
 
     @Column

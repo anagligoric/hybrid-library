@@ -1,25 +1,25 @@
 package com.hybridlibrary.services;
 
-import com.hybridlibrary.models.Book;
+import com.hybridlibrary.dtos.BookDto;
 
-import java.util.Collection;
+import java.util.List;
 
 
-public interface BookService extends AbstractService<Book, Long> {
+public interface BookService extends AbstractService<BookDto, Long> {
 
-    Collection<Book> findAll();
+    List<BookDto> findAll();
 
-    Book getOne(Long id);
+    BookDto getOne(Long id);
 
-    Collection<Book> getByTitle(String title);
+    List<BookDto> getByTitle(String title);
 
-    Collection<Book> getByAuthor(String author);
+    List<BookDto> getByAuthor(String author);
 
-    Book update(Book book);
+    BookDto update(BookDto bookDto);
 
-    Book create(Book book);
+    BookDto create(BookDto book);
 
-    void delete(Long id);
+    BookDto delete(Long id);
 
     boolean existById(Long id);
 

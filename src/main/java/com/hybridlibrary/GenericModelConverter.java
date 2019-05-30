@@ -28,7 +28,8 @@ public class GenericModelConverter implements GenericConverter {
                 new ConvertiblePair(BookRental.class, BookRentalDto.class),
                 new ConvertiblePair(BookRentalDto.class, BookRental.class),
                 new ConvertiblePair(User.class, UserDto.class),
-                new ConvertiblePair(UserDto.class, User.class)};
+                new ConvertiblePair(UserDto.class, User.class)
+        };
         return ImmutableSet.copyOf(pairs);
     }
 
@@ -51,84 +52,90 @@ public class GenericModelConverter implements GenericConverter {
         } else if (o instanceof UserDto) {
             return convertUserDto(o);
         } else {
-            return null;
+            throw new IllegalArgumentException("Conversion arguments does not match to any converter");
         }
     }
 
     private static BookDto convertBook(Object o) {
         Book book = (Book) o;
-        BookDto bookDto = new BookDto();
-        bookDto.setAuthor(book.getAuthor());
-        bookDto.setLanguage(book.getLanguage());
-        bookDto.setRentPeriod(book.getRentPeriod());
-        bookDto.setTitle(book.getTitle());
-        return bookDto;
+        return BookDto.builder()
+                .id(book.getId())
+                .author(book.getAuthor())
+                .language(book.getLanguage())
+                .rentPeriod(book.getRentPeriod())
+                .title(book.getTitle()).build();
+
     }
 
     private static Book convertBookDto(Object o) {
         BookDto bookDto = (BookDto) o;
-        Book book = new Book();
-        book.setAuthor(bookDto.getAuthor());
-        book.setLanguage(bookDto.getLanguage());
-        book.setRentPeriod(bookDto.getRentPeriod());
-        book.setTitle(bookDto.getTitle());
-        return book;
+        return Book.builder()
+                .author(bookDto.getAuthor())
+                .language(bookDto.getLanguage())
+                .rentPeriod(bookDto.getRentPeriod())
+                .title(bookDto.getTitle()).build();
     }
 
     private static BookCopyDto convertBookCopy(Object o) {
         BookCopy bookCopy = (BookCopy) o;
-        BookCopyDto bookCopyDto = BookCopyDto.builder()
-                .bookId(bookCopy.getBook().getId()).build();
-        bookCopyDto.setRented(bookCopy.getRented());
-        bookCopyDto.setRentDate(bookCopy.getRentDate());
-        bookCopyDto.setUser(bookCopy.getUser());
+        return BookCopyDto.builder()
+                .id(bookCopy.getId())
+                .bookId(bookCopy.getBook().getId())
+                .rentDate(bookCopy.getRentDate())
+                .rented(bookCopy.getRented())
+                .userId(bookCopy.getUser() == null ? null : bookCopy.getUser().getId())
+                .build();
 
-        return bookCopyDto;
     }
 
     private static BookCopy convertBookCopyDto(Object o) {
         BookCopyDto bookCopyDto = (BookCopyDto) o;
-        BookCopy bookCopy = BookCopy.builder()
-                .rentDate(bookCopyDto.getRentDate()).rented(bookCopyDto.isRented()).user(bookCopyDto.getUser()).build();
+        return BookCopy.builder()
+                .rentDate(bookCopyDto.getRentDate())
+                .rented(bookCopyDto.isRented())
+                .build();
 
-        return bookCopy;
     }
 
     private static BookRentalDto convertBookRental(Object o) {
         BookRental bookRental = (BookRental) o;
-        BookRentalDto bookRentalDto = new BookRentalDto();
-        bookRentalDto.setBookCopy(bookRental.getBookCopy());
-        bookRentalDto.setRentDate(bookRental.getRentDate());
-        bookRentalDto.setReturnDate(bookRental.getReturnDate());
-        return bookRentalDto;
+        return BookRentalDto.builder()
+                .id(bookRental.getId())
+                .returnDate(bookRental.getReturnDate())
+                .bookCopyId(bookRental.getBookCopy().getId())
+                .userId(bookRental.getUser().getId())
+                .bookId(bookRental.getBook().getId())
+                .build();
+
     }
 
     private static BookRental convertBookRentalDto(Object o) {
         BookRentalDto bookRentalDto = (BookRentalDto) o;
-        BookRental bookRental = new BookRental();
-        bookRental.setBookCopy(bookRentalDto.getBookCopy());
-        bookRental.setRentDate(bookRentalDto.getRentDate());
-        bookRental.setReturnDate(bookRentalDto.getReturnDate());
-        return bookRental;
+        return BookRental.builder()
+                .returnDate(bookRentalDto.getReturnDate())
+                .build();
+
     }
 
     private static UserDto convertUser(Object o) {
         User user = (User) o;
-        UserDto userDto = new UserDto();
-        userDto.setFirstName(user.getFirstName());
-        userDto.setLastName(user.getLastName());
-        userDto.setEmail(user.getEmail());
-        userDto.setUsername(user.getUsername());
-        return userDto;
+        return UserDto.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .username(user.getUsername())
+                .build();
+
     }
 
     private static User convertUserDto(Object o) {
         UserDto userDto = (UserDto) o;
-        User user = new User();
-        user.setFirstName(userDto.getFirstName());
-        user.setLastName(userDto.getLastName());
-        user.setEmail(userDto.getEmail());
-        user.setUsername(userDto.getUsername());
-        return user;
+        return User.builder()
+                .firstName(userDto.getFirstName())
+                .lastName(userDto.getLastName())
+                .email(userDto.getEmail())
+                .username(userDto.getUsername())
+                .build();
     }
 }

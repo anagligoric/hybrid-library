@@ -1,27 +1,35 @@
 package com.hybridlibrary.models;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
-@Data
+@Getter
+@Setter
+@Builder
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class BookRental extends AbstractModel implements Serializable {
 
     @ManyToOne
     @JoinColumn
     private BookCopy bookCopy;
 
-    @FutureOrPresent(message = "Rent date can not be in the past")
-    @Temporal(TemporalType.DATE)
-    private Date rentDate;
+    @ManyToOne
+    @JoinColumn
+    private User user;
 
-    @FutureOrPresent(message = "Return date can not be in the past")
-    @Temporal(TemporalType.DATE)
-    private Date returnDate;
+    @ManyToOne
+    @JoinColumn
+    private Book book;
+
+    @NotNull
+    private LocalDate returnDate;
 }

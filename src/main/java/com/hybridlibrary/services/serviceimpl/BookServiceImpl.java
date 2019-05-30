@@ -1,24 +1,26 @@
 package com.hybridlibrary.services.serviceimpl;
 
+import com.hybridlibrary.dtos.BookDto;
 import com.hybridlibrary.models.Book;
-import com.hybridlibrary.models.BookCopy;
-import com.hybridlibrary.models.BookRental;
 import com.hybridlibrary.repositories.BookCopyRepository;
 import com.hybridlibrary.repositories.BookRentalRepository;
 import com.hybridlibrary.repositories.BookRepository;
 import com.hybridlibrary.services.BookService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @Service
 public class BookServiceImpl implements BookService {
 
+    @Autowired
+    private ConversionService conversionService;
 
     @Autowired
     private BookRepository bookRepository;
@@ -30,78 +32,79 @@ public class BookServiceImpl implements BookService {
     private BookCopyRepository bookCopyRepository;
 
     @Override
-    public Collection<Book> findAll() {
-        return bookRepository.findAll();
+    public List<BookDto> findAll() {
+        List<BookDto> bookList = new ArrayList<>();
+        for (Book book:
+            bookRepository.findAll()) {
+            bookList.add(conversionService.convert(book, BookDto.class));
+        }
+        log.info("Books fetched");
+        return bookList;
     }
 
     @Override
-    public Book getOne(Long id) {
-        return bookRepository.getOne(id);
+    public BookDto getOne(Long id) {
+        log.info("Book with id {} is listed", id);
+        return conversionService.convert(bookRepository.getOne(id), BookDto.class);
     }
 
     @Override
-    public Collection<Book> getByTitle(String title) {
-        return bookRepository.findByTitleContainingIgnoreCase(title);
-
+    public List<BookDto> getByTitle(String title) {
+        List<BookDto> bookList = new ArrayList<>();
+        for (Book book:
+                bookRepository.findByTitleContainingIgnoreCase(title)) {
+            bookList.add(conversionService.convert(book, BookDto.class));
+        }
+        log.info("Books which title contains '{}' are listed", title);
+        return bookList;
     }
 
     @Override
-    public Collection<Book> getByAuthor(String author) {
-        return bookRepository.findByAuthorContainingIgnoreCase(author);
+    public List<BookDto> getByAuthor(String author) {
+        List<BookDto> bookList = new ArrayList<>();
+        for (Book book:
+                bookRepository.findByAuthorContainingIgnoreCase(author)) {
+            bookList.add(conversionService.convert(book, BookDto.class));
+        }
+        log.info("Books which author contains '{}' are listed", author);
+        return bookList;
     }
 
     @Override
-    public Book update(Book book) {
-        bookRepository.save(book);
-        return book;
+    public BookDto update(BookDto bookDto) {
+        Book book = conversionService.convert(bookDto, Book.class);
+        log.info("{} is updated.", book);
+        return conversionService.convert(bookRepository.save(book), BookDto.class);
     }
 
     @Override
-    public Book create(Book book) {
-        Book newBook = bookRepository.save(book);
-        return newBook;
+    public BookDto create(BookDto bookDto) {
+        Book book = conversionService.convert(bookDto, Book.class);
+        log.info("{} is added.", book);
+        return conversionService.convert(bookRepository.save(book), BookDto.class);
     }
 
     @Override
-    public void delete(Long id) {
+    public BookDto delete(Long id) {
 
-                Book book = bookRepository.getOne(id);
+        Book book = bookRepository.getOne(id);
+        if(CollectionUtils.isEmpty(bookCopyRepository.findByBook(book))){
+            log.info("Book with id {} is deleted.", id);
+            bookRepository.deleteById(id);
+            return conversionService.convert(book, BookDto.class);
+        }else if(bookCopyRepository.countByBook(book).equals(
+                bookCopyRepository.countByBookAndRentedEquals(book, false)
+        )){
+            log.info("Book with id {} is deleted", id);
+            bookRentalRepository.deleteByBook(book);
+            bookCopyRepository.deleteByBook(book);
+            bookRepository.deleteById(id);
+            return conversionService.convert(book, BookDto.class);
 
-                Collection<BookCopy> bookCopies = bookCopyRepository.findByBook(book);
-
-                if(CollectionUtils.isEmpty(bookCopies)){
-                    bookRepository.deleteById(id);
-                }else{
-                    List<BookRental> bookRentals = new ArrayList<>();
-                    List<Date> rentalDates =  new ArrayList<>();
-                    for (BookCopy bookCopy:
-                         bookCopies) {
-                        Collection<BookRental> rentals = bookRentalRepository.getByBookCopy(bookCopy);
-                       for (BookRental bookRental:
-                             rentals) {
-                           bookRentals.add(bookRental);
-                           rentalDates.add(bookRental.getReturnDate());
-                        }
-                    }
-                    if(CollectionUtils.isEmpty(bookRentals) || !rentalDates.contains(null)){
-                        for(BookRental bookRental: bookRentals){
-                            bookRentalRepository.deleteById(bookRental.getId());
-                        }
-                        for (BookCopy bookCopy:
-                                bookCopies) {
-                            bookCopyRepository.deleteById(bookCopy.getId());
-
-                        }
-                        bookRepository.deleteById(id);
-                        System.out.println("Deleted");
-
-                    }else{
-                        System.out.println("Exist");
-                    }
-                }
-
-
-
+        }else{
+            log.warn("Book with id {} can not be deleted", id);
+            throw new IllegalArgumentException("Book can not be deleted, it has rented copies");
+        }
     }
 
     @Override

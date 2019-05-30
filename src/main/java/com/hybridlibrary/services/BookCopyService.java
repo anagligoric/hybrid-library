@@ -1,25 +1,28 @@
 package com.hybridlibrary.services;
 
-import com.hybridlibrary.models.BookCopy;
+import com.hybridlibrary.dtos.BookCopyDto;
 
-import java.util.Collection;
+import java.util.List;
 
-public interface BookCopyService extends AbstractService<BookCopy, Long> {
+public interface BookCopyService extends AbstractService<BookCopyDto, Long> {
 
-    Collection<BookCopy> findAll();
+    List<BookCopyDto> findAll();
 
-    BookCopy getOne(Long id);
+    BookCopyDto getOne(Long id);
 
-    Collection<BookCopy> getByBook(Long id);
+    List<BookCopyDto> getByBook(Long id);
 
-    BookCopy update(BookCopy bookCopy);
+    BookCopyDto update(BookCopyDto bookCopyDto);
 
-    BookCopy create(BookCopy bookCopy);
+    BookCopyDto create(BookCopyDto bookCopyDto, Long id);
 
-    void delete(Long id);
+    BookCopyDto delete(Long id);
 
     boolean existById(Long id);
 
-    void assignBook(BookCopy bookCopy, Long id);
+    BookCopyDto findByBookAndId(Long bookId, Long id);
+
+    List<BookCopyDto> overdueBookReturns();
+
 
 }

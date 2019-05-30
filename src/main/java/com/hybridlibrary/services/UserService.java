@@ -1,23 +1,25 @@
 package com.hybridlibrary.services;
 
-import com.hybridlibrary.models.User;
+import com.hybridlibrary.dtos.UserDto;
 
-import java.util.Collection;
+import java.util.List;
 
 
-public interface UserService extends AbstractService<User, Long> {
+public interface UserService extends AbstractService<UserDto, Long> {
 
-    Collection<User> findAll();
+    List<UserDto> findAll();
 
-    User getOne(Long id);
+    UserDto getOne(Long id);
 
-    Collection<User> getByUsername(String username);
+    List<UserDto> getByUsername(String username);
 
-    User update(User user);
+    UserDto update(UserDto userDto);
 
-    User create(User user);
+    UserDto create(UserDto userDto);
 
-    void delete(Long id);
+    UserDto delete(Long id);
 
     boolean existById(Long id);
+
+    UserDto createPassword(Long id, String password);
 }

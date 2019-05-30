@@ -1,15 +1,14 @@
 package com.hybridlibrary.services.serviceimpl;
 
-import com.hybridlibrary.models.Book;
+import com.hybridlibrary.dtos.BookRentalDto;
 import com.hybridlibrary.models.BookCopy;
-import com.hybridlibrary.models.BookRental;
 import com.hybridlibrary.repositories.BookCopyRepository;
 import com.hybridlibrary.repositories.BookRentalRepository;
 import com.hybridlibrary.services.BookRentalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.util.List;
 
 @Service
 public class BookRentalServiceImpl implements BookRentalService {
@@ -20,31 +19,28 @@ public class BookRentalServiceImpl implements BookRentalService {
     private BookCopyRepository bookCopyRepository;
 
     @Override
-    public Collection<BookRental> findAll() {
-        return bookRentalRepository.findAll();
+    public List<BookRentalDto> findAll() {
+        return null;
     }
 
     @Override
-    public BookRental getOne(Long id) {
-        return bookRentalRepository.getOne(id);
+    public BookRentalDto getOne(Long id) {
+        return null;
     }
 
     @Override
-    public BookRental update(BookRental book) {
-        bookRentalRepository.save(book);
-        return book;
+    public BookRentalDto update(BookRentalDto book) {
+        return null;
     }
 
     @Override
-    public BookRental create(BookRental bookRental) {
-        BookCopy bookCopy = bookRental.getBookCopy();
-        Book book = bookCopy.getBook();
-        return bookRentalRepository.saveAndFlush(bookRental);
+    public BookRentalDto create(BookRentalDto bookRental) {
+        return null;
     }
 
     @Override
-    public void delete(Long id) {
-        bookRentalRepository.deleteById(id);
+    public BookRentalDto delete(Long id) {
+        return null;
     }
 
     @Override
@@ -53,9 +49,8 @@ public class BookRentalServiceImpl implements BookRentalService {
     }
 
     @Override
-    public Collection<BookRental> getByBookCopy(Long id) {
-        BookCopy bookCopy = bookCopyRepository.getOne(id);
-        return bookRentalRepository.getByBookCopy(bookCopy);
+    public List<BookRentalDto> getByBookCopy(Long id) {
+        return null;
     }
 
     @Override
@@ -63,6 +58,4 @@ public class BookRentalServiceImpl implements BookRentalService {
         BookCopy bookCopy = bookCopyRepository.getOne(id);
         return bookRentalRepository.countByBookCopy(bookCopy);
     }
-
-
 }

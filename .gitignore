@@ -29,4 +29,5 @@ HELP.md
 .vscode/
 
 ###logback###
-.log
+*.log
+

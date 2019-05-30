@@ -1,14 +1,22 @@
 package com.hybridlibrary.dtos;
 
-import com.hybridlibrary.models.BookCopy;
+import lombok.Builder;
 import lombok.Data;
 
-import java.util.Date;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
+@Builder
 @Data
 public class BookRentalDto {
-    private UserDto user;
-    private BookCopy bookCopy;
-    private Date rentDate;
-    private Date returnDate;
+    @NotNull
+    private Long id;
+    @NotNull
+    private Long bookId;
+    @NotNull
+    private Long userId;
+    @NotNull
+    private Long bookCopyId;
+    @NotNull
+    private LocalDate returnDate;
 }

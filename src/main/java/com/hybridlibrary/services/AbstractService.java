@@ -1,9 +1,9 @@
 package com.hybridlibrary.services;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface AbstractService<T, K> {
-    Collection<T> findAll();
+    List<T> findAll();
 
     T getOne(K id);
 
@@ -11,7 +11,7 @@ public interface AbstractService<T, K> {
 
     T create(T t);
 
-    void delete(K id);
+    T delete(K id);
 
     boolean existById(K id);
 }
