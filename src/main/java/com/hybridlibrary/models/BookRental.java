@@ -12,7 +12,6 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
-@Builder
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,4 +31,13 @@ public class BookRental extends AbstractModel implements Serializable {
 
     @NotNull
     private LocalDate returnDate;
+
+    @Builder
+    public BookRental(Long id, BookCopy bookCopy, User user, Book book, LocalDate returnDate){
+        super(id);
+        this.bookCopy = bookCopy;
+        this.user = user;
+        this.book = book;
+        this.returnDate = returnDate;
+    }
 }

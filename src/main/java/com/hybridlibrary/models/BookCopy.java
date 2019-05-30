@@ -10,7 +10,6 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
-@Builder
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,5 +30,15 @@ public class BookCopy extends AbstractModel implements Serializable {
     @ManyToOne
     @JoinColumn
     private User user;
+
+    @Builder
+    public BookCopy(Long id, Book book, Boolean rented, LocalDate rentDate, User user){
+        super(id);
+        this.book = book;
+        this.rentDate = rentDate;
+        this.rented = rented;
+        this.user = user;
+    }
+
 
 }

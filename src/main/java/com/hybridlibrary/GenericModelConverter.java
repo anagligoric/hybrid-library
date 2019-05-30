@@ -70,6 +70,7 @@ public class GenericModelConverter implements GenericConverter {
     private static Book convertBookDto(Object o) {
         BookDto bookDto = (BookDto) o;
         return Book.builder()
+                .id(bookDto.getId())
                 .author(bookDto.getAuthor())
                 .language(bookDto.getLanguage())
                 .rentPeriod(bookDto.getRentPeriod())
@@ -91,6 +92,7 @@ public class GenericModelConverter implements GenericConverter {
     private static BookCopy convertBookCopyDto(Object o) {
         BookCopyDto bookCopyDto = (BookCopyDto) o;
         return BookCopy.builder()
+                .id(bookCopyDto.getId())
                 .rentDate(bookCopyDto.getRentDate())
                 .rented(bookCopyDto.isRented())
                 .build();
@@ -112,6 +114,7 @@ public class GenericModelConverter implements GenericConverter {
     private static BookRental convertBookRentalDto(Object o) {
         BookRentalDto bookRentalDto = (BookRentalDto) o;
         return BookRental.builder()
+                .id(bookRentalDto.getId())
                 .returnDate(bookRentalDto.getReturnDate())
                 .build();
 
@@ -132,6 +135,7 @@ public class GenericModelConverter implements GenericConverter {
     private static User convertUserDto(Object o) {
         UserDto userDto = (UserDto) o;
         return User.builder()
+                .id(userDto.getId())
                 .firstName(userDto.getFirstName())
                 .lastName(userDto.getLastName())
                 .email(userDto.getEmail())

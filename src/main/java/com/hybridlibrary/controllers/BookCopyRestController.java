@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 @RestController
@@ -29,22 +28,11 @@ public class BookCopyRestController {
 
     @PostMapping("")
     public ResponseEntity<BookCopyDto> create(@PathVariable Long bookId, @RequestBody BookCopyDto bookCopyDto) {
-        try {
-            return ResponseEntity.ok(bookCopyService.create(bookCopyDto, bookId));
-        } catch (ConstraintViolationException e) {
-            log.error("Error occurred {}", e.toString(), e);
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok(bookCopyService.create(bookCopyDto, bookId));
     }
 
     @PutMapping("")
     public ResponseEntity<BookCopyDto> update(@RequestBody BookCopyDto bookCopyDto) {
-        try {
-            return ResponseEntity.ok(bookCopyService.update(bookCopyDto));
-        } catch (ConstraintViolationException e) {
-            log.error("Error occurred {}", e.toString(), e);
-            return ResponseEntity.badRequest().build();
-        }
-
+        return ResponseEntity.ok(bookCopyService.update(bookCopyDto));
     }
 }

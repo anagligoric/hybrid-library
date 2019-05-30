@@ -33,7 +33,7 @@ public class CopyRestController {
     }
 
     @GetMapping("/overdue")
-    public ResponseEntity<List<BookCopyDto>> getOverdueBooks(){
+    public ResponseEntity<List<BookCopyDto>> getOverdueBooks() {
         return ResponseEntity.ok(bookCopyService.overdueBookReturns());
     }
 

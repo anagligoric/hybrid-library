@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 @RestController
@@ -41,26 +40,16 @@ public class UserRestController {
 
     @PostMapping("")
     public ResponseEntity<UserDto> create(@RequestBody UserDto userDto) {
-        try {
-            return ResponseEntity.ok(userService.create(userDto));
-        } catch (ConstraintViolationException e) {
-            log.error("Error occurred {}", e.toString(), e);
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok(userService.create(userDto));
     }
 
     @PostMapping("/save-password/{id}")
-    public ResponseEntity<UserDto> createPassword(@PathVariable("id") Long id, @RequestBody String password){
+    public ResponseEntity<UserDto> createPassword(@PathVariable("id") Long id, @RequestBody String password) {
         return ResponseEntity.ok(userService.createPassword(id, password));
     }
 
-    @PutMapping("")
+    @PutMapping
     public ResponseEntity<UserDto> update(@RequestBody UserDto userDto) {
-        try {
-            return ResponseEntity.ok(userService.update(userDto));
-        } catch (ConstraintViolationException e) {
-            log.error("Error occurred {}", e.toString(), e);
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok(userService.update(userDto));
     }
 }

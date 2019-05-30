@@ -1,6 +1,7 @@
 package com.hybridlibrary.services.serviceimpl;
 
 import com.hybridlibrary.dtos.BookDto;
+import com.hybridlibrary.exception.NotFoundException;
 import com.hybridlibrary.models.Book;
 import com.hybridlibrary.repositories.BookCopyRepository;
 import com.hybridlibrary.repositories.BookRentalRepository;
@@ -34,47 +35,67 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookDto> findAll() {
         List<BookDto> bookList = new ArrayList<>();
-        for (Book book:
-            bookRepository.findAll()) {
+        for (Book book :
+                bookRepository.findAll()) {
             bookList.add(conversionService.convert(book, BookDto.class));
         }
-        log.info("Books fetched");
-        return bookList;
+        if (CollectionUtils.isEmpty(bookList)) {
+            throw new NotFoundException("There is no any books.");
+        } else {
+            log.info("Books fetched");
+            return bookList;
+        }
     }
 
     @Override
     public BookDto getOne(Long id) {
-        log.info("Book with id {} is listed", id);
-        return conversionService.convert(bookRepository.getOne(id), BookDto.class);
+        if (bookRepository.existsById(id)) {
+            log.info("Book with id {} is listed", id);
+            return conversionService.convert(bookRepository.getOne(id), BookDto.class);
+        } else {
+            throw new NotFoundException("Book with id " + id + " not found.");
+        }
     }
 
     @Override
     public List<BookDto> getByTitle(String title) {
         List<BookDto> bookList = new ArrayList<>();
-        for (Book book:
+        for (Book book :
                 bookRepository.findByTitleContainingIgnoreCase(title)) {
             bookList.add(conversionService.convert(book, BookDto.class));
         }
-        log.info("Books which title contains '{}' are listed", title);
-        return bookList;
+        if (CollectionUtils.isEmpty(bookList)) {
+            throw new NotFoundException("There is no any books which title contains " + title);
+        } else {
+            log.info("Books which title contains '{}' are listed", title);
+            return bookList;
+        }
     }
 
     @Override
     public List<BookDto> getByAuthor(String author) {
         List<BookDto> bookList = new ArrayList<>();
-        for (Book book:
+        for (Book book :
                 bookRepository.findByAuthorContainingIgnoreCase(author)) {
             bookList.add(conversionService.convert(book, BookDto.class));
         }
-        log.info("Books which author contains '{}' are listed", author);
-        return bookList;
+        if (CollectionUtils.isEmpty(bookList)) {
+            throw new NotFoundException("There is no any books which author contains " + author);
+        } else {
+            log.info("Books which author contains '{}' are listed", author);
+            return bookList;
+        }
     }
 
     @Override
     public BookDto update(BookDto bookDto) {
         Book book = conversionService.convert(bookDto, Book.class);
-        log.info("{} is updated.", book);
-        return conversionService.convert(bookRepository.save(book), BookDto.class);
+        if (bookRepository.existsById(book.getId())) {
+            log.info("{} is updated.", book);
+            return conversionService.convert(bookRepository.save(book), BookDto.class);
+        } else {
+            throw new NotFoundException("Book with id " + bookDto.getId() + " not found");
+        }
     }
 
     @Override
@@ -82,29 +103,34 @@ public class BookServiceImpl implements BookService {
         Book book = conversionService.convert(bookDto, Book.class);
         log.info("{} is added.", book);
         return conversionService.convert(bookRepository.save(book), BookDto.class);
+
     }
 
     @Override
     public BookDto delete(Long id) {
+        if (bookRepository.existsById(id)) {
+            Book book = bookRepository.getOne(id);
+            if (CollectionUtils.isEmpty(bookCopyRepository.findByBook(book))) {
+                log.info("Book with id {} is deleted.", id);
+                bookRepository.deleteById(id);
+                return conversionService.convert(book, BookDto.class);
+            } else if (bookCopyRepository.countByBook(book).equals(
+                    bookCopyRepository.countByBookAndRentedEquals(book, false)
+            )) {
+                log.info("Book with id {} is deleted", id);
+                bookRentalRepository.deleteByBook(book);
+                bookCopyRepository.deleteByBook(book);
+                bookRepository.deleteById(id);
+                return conversionService.convert(book, BookDto.class);
 
-        Book book = bookRepository.getOne(id);
-        if(CollectionUtils.isEmpty(bookCopyRepository.findByBook(book))){
-            log.info("Book with id {} is deleted.", id);
-            bookRepository.deleteById(id);
-            return conversionService.convert(book, BookDto.class);
-        }else if(bookCopyRepository.countByBook(book).equals(
-                bookCopyRepository.countByBookAndRentedEquals(book, false)
-        )){
-            log.info("Book with id {} is deleted", id);
-            bookRentalRepository.deleteByBook(book);
-            bookCopyRepository.deleteByBook(book);
-            bookRepository.deleteById(id);
-            return conversionService.convert(book, BookDto.class);
-
-        }else{
-            log.warn("Book with id {} can not be deleted", id);
-            throw new IllegalArgumentException("Book can not be deleted, it has rented copies");
+            } else {
+                log.warn("Book with id {} can not be deleted", id);
+                throw new IllegalArgumentException("Book can not be deleted, it has rented copies");
+            }
+        } else {
+            throw new NotFoundException("Book with id " + id + " not found.");
         }
+
     }
 
     @Override

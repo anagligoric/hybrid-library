@@ -1,6 +1,5 @@
 package com.hybridlibrary.models;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -15,12 +14,10 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Book extends AbstractModel implements Serializable {
-
 
     @Column
     @NotBlank(message = "Book title can not be blank")
@@ -41,4 +38,14 @@ public class Book extends AbstractModel implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "book")
     private List<BookCopy> bookCopies;
+
+    @Builder
+    public Book(Long id, String title, String author, String language, Integer rentPeriod, List<BookCopy> bookCopies) {
+        super(id);
+        this.title = title;
+        this.author = author;
+        this.language = language;
+        this.rentPeriod = rentPeriod;
+        this.bookCopies = bookCopies;
+    }
 }

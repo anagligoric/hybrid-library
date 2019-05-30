@@ -3,8 +3,9 @@ package com.hybridlibrary.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.*;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -14,20 +15,18 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Builder
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends AbstractModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
-
     @Column
-    @NotBlank
+    @NotBlank(message = "First name can not be blank")
     private String firstName;
 
     @Column
-    @NotBlank
+    @NotBlank(message = "Last name can not be blank")
     private String lastName;
 
     @Column
@@ -35,7 +34,7 @@ public class User extends AbstractModel implements Serializable {
     private String email;
 
     @Column
-    @NotBlank
+    @NotBlank(message = "Username can not be blank")
     private String username;
 
     @Column
@@ -46,6 +45,14 @@ public class User extends AbstractModel implements Serializable {
     @OneToMany(mappedBy = "user")
     private List<BookCopy> bookCopies;
 
-
-
+    @Builder
+    public User(Long id, String firstName, String lastName, String email, String username, String password, List<BookCopy> bookCopies) {
+        super(id);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.bookCopies = bookCopies;
+    }
 }
