@@ -1,7 +1,7 @@
 package com.hybridlibrary.services.serviceimpl;
 
 import com.hybridlibrary.dtos.BookCopyDto;
-import com.hybridlibrary.exception.NotFoundException;
+import com.hybridlibrary.exceptions.NotFoundException;
 import com.hybridlibrary.models.Book;
 import com.hybridlibrary.models.BookCopy;
 import com.hybridlibrary.models.BookRental;
@@ -17,6 +17,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -141,9 +142,9 @@ public class BookCopyServiceImpl implements BookCopyService {
         return conversionService.convert(bookCopyRepository.save(bookCopy), BookCopyDto.class);
     }
 
+    @Transactional
     @Override
     public BookCopyDto delete(Long id) {
-
         if (bookRepository.existsById(id)) {
             BookCopy bookCopy = bookCopyRepository.getOne(id);
             bookRentalRepository.deleteByBookCopy(bookCopy);

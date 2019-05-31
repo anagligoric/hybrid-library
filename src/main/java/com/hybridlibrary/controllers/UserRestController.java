@@ -12,13 +12,13 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@RequestMapping("user")
+@RequestMapping("/user")
 public class UserRestController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping("")
+    @GetMapping()
     public ResponseEntity<List<UserDto>> findAll() {
         return ResponseEntity.ok(userService.findAll());
     }

@@ -1,8 +1,11 @@
-package com.hybridlibrary.exception;
+package com.hybridlibrary.exceptions;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,9 +13,11 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
-
-@RestController
+@Slf4j
+//@RestController
 public class CustomErrorController implements ErrorController {
+
+
     @GetMapping("/error")
     public ResponseEntity<ErrorMessage> handleError(Exception ex, HttpServletRequest request) {
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
@@ -34,7 +39,8 @@ public class CustomErrorController implements ErrorController {
         }
 
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        log.error("Unexpected error occurred while handling exception: ", ex);
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override

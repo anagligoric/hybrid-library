@@ -1,6 +1,7 @@
 package com.hybridlibrary.services;
 
 import com.hybridlibrary.dtos.UserDto;
+import com.hybridlibrary.models.User;
 
 import java.util.List;
 
@@ -12,6 +13,8 @@ public interface UserService extends AbstractService<UserDto, Long> {
     UserDto getOne(Long id);
 
     List<UserDto> getByUsername(String username);
+
+    User findByUsername(String username);
 
     UserDto update(UserDto userDto);
 

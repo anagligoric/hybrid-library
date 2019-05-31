@@ -1,4 +1,4 @@
-package com.hybridlibrary.exception;
+package com.hybridlibrary.exceptions;
 
 public class NotFoundException extends RuntimeException{
 

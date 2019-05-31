@@ -1,7 +1,7 @@
 package com.hybridlibrary.services.serviceimpl;
 
 import com.hybridlibrary.dtos.UserDto;
-import com.hybridlibrary.exception.NotFoundException;
+import com.hybridlibrary.exceptions.NotFoundException;
 import com.hybridlibrary.models.User;
 import com.hybridlibrary.repositories.UserRepository;
 import com.hybridlibrary.services.UserService;
@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.transaction.Transactional;
-import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
+
 
     @Autowired
     private UserRepository userRepository;
@@ -67,6 +67,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findByUsername(String username) {
+
+        User user = userRepository.findByUsername(username);
+        if (userRepository.existsById(user.getId())) {
+            return user;
+        } else {
+            throw new NotFoundException("There is no any user with username " + username);
+        }
+    }
+
+    @Override
     public UserDto update(UserDto userDto) {
         User user = conversionService.convert(userDto, User.class);
         if (userRepository.existsById(userDto.getId())) {
@@ -103,6 +114,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsById(id);
     }
 
+    @Transactional
     public UserDto createPassword(Long id, String password) {
         User user = userRepository.getOne(id);
         if (userRepository.existsById(id)) {

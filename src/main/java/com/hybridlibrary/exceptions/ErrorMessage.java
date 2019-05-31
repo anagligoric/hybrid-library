@@ -1,4 +1,4 @@
-package com.hybridlibrary.exception;
+package com.hybridlibrary.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

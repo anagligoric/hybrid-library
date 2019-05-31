@@ -6,7 +6,6 @@ import com.hybridlibrary.models.BookRental;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
 
@@ -17,10 +16,8 @@ public interface BookRentalRepository extends JpaRepository<BookRental, Long> {
 
     Integer countByBookCopy(BookCopy bookCopy);
 
-    @Transactional
     Long deleteByBookCopy(BookCopy bookCopy);
 
-    @Transactional
     Long deleteByBook(Book book);
 
     @Query(value = "select top ?1 b.id as bookId, b.title as bookTitle, b.author as bookAuthor, b.language as bookLanguage, count(br.id) AS rentalCount from book_rental br join book b on (b.id=br.book_id) group by b.id order by rentalCount desc", nativeQuery = true)

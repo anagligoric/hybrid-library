@@ -1,7 +1,7 @@
 package com.hybridlibrary.services.serviceimpl;
 
 import com.hybridlibrary.dtos.BookRentalDto;
-import com.hybridlibrary.exception.NotFoundException;
+import com.hybridlibrary.exceptions.NotFoundException;
 import com.hybridlibrary.models.BookCopy;
 import com.hybridlibrary.repositories.BookCopyRepository;
 import com.hybridlibrary.repositories.BookRentCount;

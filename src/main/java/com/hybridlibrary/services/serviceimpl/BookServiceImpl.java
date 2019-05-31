@@ -1,7 +1,7 @@
 package com.hybridlibrary.services.serviceimpl;
 
 import com.hybridlibrary.dtos.BookDto;
-import com.hybridlibrary.exception.NotFoundException;
+import com.hybridlibrary.exceptions.NotFoundException;
 import com.hybridlibrary.models.Book;
 import com.hybridlibrary.repositories.BookCopyRepository;
 import com.hybridlibrary.repositories.BookRentalRepository;
@@ -13,6 +13,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,6 +107,7 @@ public class BookServiceImpl implements BookService {
 
     }
 
+    @Transactional
     @Override
     public BookDto delete(Long id) {
         if (bookRepository.existsById(id)) {
