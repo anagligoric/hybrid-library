@@ -1,80 +1,38 @@
 package com.hybridlibrary.controllers;
 
-import com.hybridlibrary.models.BookCopy;
-
+import com.hybridlibrary.dtos.BookCopyDto;
 import com.hybridlibrary.services.BookCopyService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
+import java.util.List;
 
 @RestController
+@RequestMapping("book/{bookId}/bookcopy")
+@Slf4j
 public class BookCopyRestController {
     @Autowired
     private BookCopyService bookCopyService;
 
-    @GetMapping("bookCopy")
-    public ResponseEntity<?> getBookCopies() {
-        Collection<BookCopy> bookCopies = bookCopyService.getAllBookCopies();
-        if (!bookCopies.isEmpty()) {
-
-            return ResponseEntity.ok(bookCopies);
-        } else {
-
-            return ResponseEntity.noContent().build();
-
-        }
+    @GetMapping("")
+    public ResponseEntity<List<BookCopyDto>> findAll(@PathVariable("bookId") Long bookId) {
+        return ResponseEntity.ok(bookCopyService.getByBook(bookId));
     }
 
-    @GetMapping("bookCopy/{id}")
-    public ResponseEntity<?> getBookCopy(@PathVariable("id") Integer id) {
-        BookCopy bookCopy = bookCopyService.getBookCopy(id);
-        return ResponseEntity.ok(bookCopy);
+    @GetMapping("/{id}")
+    public ResponseEntity<BookCopyDto> getOne(@PathVariable("bookId") Long bookId, @PathVariable("id") Long id) {
+        return ResponseEntity.ok(bookCopyService.findByBookAndId(bookId, id));
     }
 
-    @GetMapping("copiesByBook/{id}")
-    public ResponseEntity<?> getCopiesForBook(@PathVariable("id") Integer id) {
-        Collection<BookCopy> bookCopies = bookCopyService.getCopiesByBook(id);
-        if (!bookCopies.isEmpty()) {
-            return ResponseEntity.ok(bookCopies);
-        } else {
-            return ResponseEntity.noContent().build();
-        }
+    @PostMapping("")
+    public ResponseEntity<BookCopyDto> create(@PathVariable Long bookId, @RequestBody BookCopyDto bookCopyDto) {
+        return ResponseEntity.ok(bookCopyService.create(bookCopyDto, bookId));
     }
 
-    @GetMapping("copiesCount/{id}")
-    public ResponseEntity<?> getCopiesCount(@PathVariable("id") Integer id) {
-        return ResponseEntity.ok(bookCopyService.getCopiesCount(id));
-    }
-    @DeleteMapping(value = "bookCopy/{id}")
-    public ResponseEntity<Void> deleteBookCopy(@PathVariable ("id") Integer id){
-
-        if(!bookCopyService.existById(id)){
-            return ResponseEntity.noContent().build();
-        }else{
-            bookCopyService.deleteBookCopy(id);
-            return ResponseEntity.ok().build();
-        }
-    }
-
-    @PostMapping(value = "bookCopy")
-    public ResponseEntity<BookCopy> createBookCopy (@RequestBody BookCopy bookCopy){
-        if(!bookCopyService.existById(bookCopy.getId())){
-            bookCopyService.createBookCopy(bookCopy);
-            return ResponseEntity.ok(bookCopy);
-        }else{
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-    }
-    @PutMapping(value = "bookCopy")
-    public ResponseEntity<BookCopy> updateBookCopy (@RequestBody BookCopy bookCopy){
-        if(!bookCopyService.existById(bookCopy.getId())){
-            return ResponseEntity.noContent().build();
-        }else{
-            bookCopyService.updateBookCopy(bookCopy);
-            return ResponseEntity.ok(bookCopy);
-        }
+    @PutMapping("")
+    public ResponseEntity<BookCopyDto> update(@RequestBody BookCopyDto bookCopyDto) {
+        return ResponseEntity.ok(bookCopyService.update(bookCopyDto));
     }
 }

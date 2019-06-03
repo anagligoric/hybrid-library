@@ -1,50 +1,28 @@
 package com.hybridlibrary.services;
 
+import com.hybridlibrary.dtos.UserDto;
 import com.hybridlibrary.models.User;
-import com.hybridlibrary.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-
-@Service
-public class UserService {
-
-    @Autowired
-    private UserRepository userRepository;
+import java.util.List;
 
 
+public interface UserService extends AbstractService<UserDto, Long> {
 
-    public UserService() {
-    }
+    List<UserDto> findAll();
 
-    public Collection<User> getAllUsers(){
-        return userRepository.findAll();
-    }
+    UserDto getOne(Long id);
 
-    public User getUser(Integer id){
-        return userRepository.getOne(id);
-    }
+    List<UserDto> getByUsername(String username);
 
-    public Collection<User> getUserByUsername(String username){
-        return userRepository.findByUsernameContainingIgnoreCase(username);
-    }
+    User findByUsername(String username);
 
-    public boolean existById(Integer id){
-        return userRepository.existsById(id);
-    }
+    UserDto update(UserDto userDto);
 
-    public User createUser(User user){
+    UserDto create(UserDto userDto);
 
-        //user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-        return user;
-    }
-    public User updateUser(User user){
-        userRepository.save(user);
-        return user;
-    }
-    public void deleteUser(Integer id){
-        userRepository.deleteById(id);
-    }
+    UserDto delete(Long id);
+
+    boolean existById(Long id);
+
+    UserDto createPassword(Long id, String password);
 }

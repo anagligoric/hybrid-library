@@ -1,30 +1,63 @@
 package com.hybridlibrary.models;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.*;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
-@Table(name = "user")
-@Data
-public class User implements Serializable {
+@Getter
+@Setter
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
+public class User extends AbstractModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @SequenceGenerator(name="USER_ID_GENERATOR", sequenceName="USER_SEQ", allocationSize = 1)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="USER_ID_GENERATOR")
-    private Integer id;
+    @Column
+    @NotBlank(message = "First name can not be blank")
+    private String firstName;
 
-    @Column(name="username")
+    @Column
+    @NotBlank(message = "Last name can not be blank")
+    private String lastName;
+
+    @Column
+    @Email(message = "Email should be valid")
+    private String email;
+
+    @Column
+    @NotBlank(message = "Username can not be blank")
     private String username;
 
-
-    @Column(name="password")
+    @Column
+    @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
 
+    @Column
+    @NotNull
+    private String role;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<BookCopy> bookCopies;
 
+    @Builder
+    public User(Long id, String firstName, String lastName, String email, String username, String password, List<BookCopy> bookCopies) {
+        super(id);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.bookCopies = bookCopies;
+    }
 }

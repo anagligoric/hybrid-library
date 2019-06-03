@@ -1,38 +1,51 @@
 package com.hybridlibrary.models;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
+import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.*;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name = "book")
-@Data
-//@JsonIgnoreProperties({"hibernateLazyInitalizer", "handler"})
-public class Book implements Serializable {
-    @Id
-    @SequenceGenerator(name="BOOK_ID_GENERATOR", sequenceName = "BOOK_SEQ", allocationSize = 1)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="BOOK_ID_GENERATOR")
-    private Integer id;
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+public class Book extends AbstractModel implements Serializable {
 
-    @Column(name="name")
-    private String name;
+    @Column
+    @NotBlank(message = "Book title can not be blank")
+    private String title;
 
-    @Column(name = "author")
+    @Column
+    @NotBlank(message = "Book author can not be blank")
     private String author;
 
-    @Column (name = "language")
+    @Column
+    @NotBlank(message = "Book language can not be blank")
     private String language;
 
-    @Column (name = "rentPeriod")
-    private int rentPeriod;
+    @Column
+    @NotNull(message = "Book rent period can not be null")
+    private Integer rentPeriod;
 
     @JsonIgnore
-    @OneToMany(mappedBy="book")
+    @OneToMany(mappedBy = "book")
     private List<BookCopy> bookCopies;
+
+    @Builder
+    public Book(Long id, String title, String author, String language, Integer rentPeriod, List<BookCopy> bookCopies) {
+        super(id);
+        this.title = title;
+        this.author = author;
+        this.language = language;
+        this.rentPeriod = rentPeriod;
+        this.bookCopies = bookCopies;
+    }
 }

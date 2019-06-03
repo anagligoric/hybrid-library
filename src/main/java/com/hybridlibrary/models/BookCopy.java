@@ -1,20 +1,44 @@
 package com.hybridlibrary.models;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
-@Table(name = "bookCopy")
-@Data
-public class BookCopy implements Serializable {
-    @Id
-    @SequenceGenerator(name="BOOK_COPY_ID_GENERATOR", sequenceName = "BOOK_COPY_SEQ", allocationSize = 1)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="BOOK_COPY_ID_GENERATOR")
-    private Integer id;
+@Getter
+@Setter
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
+public class BookCopy extends AbstractModel implements Serializable {
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn
+    private Book book;
+
+    @Column
+    @NotNull(message = "Rent status can not be null")
+    private Boolean rented;
+
+    @Column
+    private LocalDate rentDate;
 
     @ManyToOne
-    @JoinColumn(name="book")
-    private Book book;
+    @JoinColumn
+    private User user;
+
+    @Builder
+    public BookCopy(Long id, Book book, Boolean rented, LocalDate rentDate, User user){
+        super(id);
+        this.book = book;
+        this.rentDate = rentDate;
+        this.rented = rented;
+        this.user = user;
+    }
+
+
 }

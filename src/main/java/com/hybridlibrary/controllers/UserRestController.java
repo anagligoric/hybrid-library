@@ -1,79 +1,55 @@
 package com.hybridlibrary.controllers;
 
 
-import com.hybridlibrary.models.User;
+import com.hybridlibrary.dtos.UserDto;
 import com.hybridlibrary.services.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
+import java.util.List;
 
 @RestController
+@Slf4j
+@RequestMapping("/user")
 public class UserRestController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping("user")
-    public ResponseEntity<Collection<User>> getUsers(){
-        Collection<User> users = userService.getAllUsers();
-        if(users.isEmpty()){
-            return ResponseEntity.noContent().build();
-        }else{
-            return ResponseEntity.ok(users);
-        }
+    @GetMapping()
+    public ResponseEntity<List<UserDto>> findAll() {
+        return ResponseEntity.ok(userService.findAll());
     }
 
-    @GetMapping("user/{id}")
-    public ResponseEntity<User> getUser(@PathVariable ("id") Integer id){
-        //User user =
-        if(!userService.existById(id)){
-            return ResponseEntity.noContent().build();
-        }else{
-            return ResponseEntity.ok(userService.getUser(id));
-        }
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto> getOne(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(userService.getOne(id));
     }
 
-    @GetMapping("username/{username}")
-    public ResponseEntity<Collection<User>> getUserByUsername(@PathVariable ("username") String username){
-        Collection<User> users = userService.getUserByUsername(username);
-        if(users.isEmpty()){
-            return ResponseEntity.noContent().build();
-        }else{
-            return ResponseEntity.ok(users);
-        }
-
-    }
-    @DeleteMapping(value = "user")
-    public ResponseEntity<Void> deleteUser(@PathVariable("id") Integer id){
-        if(!userService.existById(id)){
-            return ResponseEntity.noContent().build();
-        }else{
-            userService.deleteUser(id);
-            return ResponseEntity.ok().build();
-        }
-    }
-    @PostMapping(value="user")
-    public ResponseEntity<User> createUser(@RequestBody User user){
-        if(userService.existById(user.getId())){
-            return ResponseEntity.noContent().build();
-        }else{
-            userService.createUser(user);
-            return ResponseEntity.ok(user);
-        }
-
-    }
-    @PutMapping(value="user")
-    public ResponseEntity<User> updateUser(@RequestBody User user){
-        if(!userService.existById(user.getId())){
-            return ResponseEntity.noContent().build();
-        }else{
-            userService.updateUser(user);
-            return ResponseEntity.ok(user);
-        }
-
+    @GetMapping("/username/{username}")
+    public ResponseEntity<List<UserDto>> getByUsername(@PathVariable("username") String username) {
+        return ResponseEntity.ok(userService.getByUsername(username));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<UserDto> delete(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(userService.delete(id));
+    }
 
+    @PostMapping("")
+    public ResponseEntity<UserDto> create(@RequestBody UserDto userDto) {
+        return ResponseEntity.ok(userService.create(userDto));
+    }
+
+    @PostMapping("/save-password/{id}")
+    public ResponseEntity<UserDto> createPassword(@PathVariable("id") Long id, @RequestBody String password) {
+        return ResponseEntity.ok(userService.createPassword(id, password));
+    }
+
+    @PutMapping
+    public ResponseEntity<UserDto> update(@RequestBody UserDto userDto) {
+        return ResponseEntity.ok(userService.update(userDto));
+    }
 }

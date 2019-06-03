@@ -1,56 +1,28 @@
 package com.hybridlibrary.services;
 
-import com.hybridlibrary.models.BookCopy;
-import com.hybridlibrary.repositories.BookCopyRepository;
-import com.hybridlibrary.repositories.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.hybridlibrary.models.Book;
+import com.hybridlibrary.dtos.BookCopyDto;
 
-import java.util.Collection;
+import java.util.List;
 
-@Service
-public class BookCopyService {
-    @Autowired
-    private BookCopyRepository bookCopyRepository;
+public interface BookCopyService extends AbstractService<BookCopyDto, Long> {
 
-    @Autowired
-    private BookRepository bookRepository;
+    List<BookCopyDto> findAll();
 
-    public Collection<BookCopy> getAllBookCopies(){
+    BookCopyDto getOne(Long id);
 
-        return bookCopyRepository.findAll();
-    }
+    List<BookCopyDto> getByBook(Long id);
 
-    public BookCopy getBookCopy(Integer id){
+    BookCopyDto update(BookCopyDto bookCopyDto);
 
-        return bookCopyRepository.getOne(id);
-    }
+    BookCopyDto create(BookCopyDto bookCopyDto, Long id);
 
-    public Collection<BookCopy> getCopiesByBook(Integer id){
+    BookCopyDto delete(Long id);
 
-        Book book = bookRepository.getOne(id);
-        return bookCopyRepository.findByBook(book);
+    boolean existById(Long id);
 
-    }
+    BookCopyDto findByBookAndId(Long bookId, Long id);
 
-    public Integer getCopiesCount(Integer id){
-        Book book = bookRepository.getOne(id);
-        return bookCopyRepository.countByBook(book);
-    }
+    List<BookCopyDto> overdueBookReturns();
 
-    public BookCopy updateBookCopy(BookCopy bookCopy){
-        bookCopyRepository.save(bookCopy);
-        return bookCopy;
-    }
-    public BookCopy createBookCopy(BookCopy bookCopy){
-        bookCopyRepository.save(bookCopy);
-        return bookCopy;
-    }
-    public void deleteBookCopy(Integer id){
-        bookCopyRepository.deleteById(id);
-    }
-    public boolean existById(Integer id){
-        return bookCopyRepository.existsById(id);
-    }
+
 }
