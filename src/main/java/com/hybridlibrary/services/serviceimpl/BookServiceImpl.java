@@ -21,24 +21,29 @@ import java.util.List;
 @Service
 public class BookServiceImpl implements BookService {
 
-    @Autowired
     private ConversionService conversionService;
 
-    @Autowired
     private BookRepository bookRepository;
 
-    @Autowired
     private BookRentalRepository bookRentalRepository;
 
-    @Autowired
     private BookCopyRepository bookCopyRepository;
+
+    @Autowired
+    public BookServiceImpl(ConversionService conversionService, BookRepository bookRepository, BookRentalRepository bookRentalRepository, BookCopyRepository bookCopyRepository) {
+        this.conversionService = conversionService;
+        this.bookRepository = bookRepository;
+        this.bookRentalRepository = bookRentalRepository;
+        this.bookCopyRepository = bookCopyRepository;
+    }
 
     @Override
     public List<BookDto> findAll() {
         List<BookDto> bookList = new ArrayList<>();
-        for (Book book :
-                bookRepository.findAll()) {
-            bookList.add(conversionService.convert(book, BookDto.class));
+        List<Book> books = bookRepository.findAll();
+        for (Book book : books) {
+            BookDto bookDto = conversionService.convert(book, BookDto.class);
+            bookList.add(bookDto);
         }
         if (CollectionUtils.isEmpty(bookList)) {
             throw new NotFoundException("There is no any books.");
@@ -52,7 +57,9 @@ public class BookServiceImpl implements BookService {
     public BookDto getOne(Long id) {
         if (bookRepository.existsById(id)) {
             log.info("Book with id {} is listed", id);
-            return conversionService.convert(bookRepository.getOne(id), BookDto.class);
+            Book book = bookRepository.getOne(id);
+            BookDto bookDto = conversionService.convert(book, BookDto.class);
+            return bookDto;
         } else {
             throw new NotFoundException("Book with id " + id + " not found.");
         }
@@ -63,6 +70,7 @@ public class BookServiceImpl implements BookService {
         List<BookDto> bookList = new ArrayList<>();
         for (Book book :
                 bookRepository.findByTitleContainingIgnoreCase(title)) {
+
             bookList.add(conversionService.convert(book, BookDto.class));
         }
         if (CollectionUtils.isEmpty(bookList)) {
@@ -93,6 +101,7 @@ public class BookServiceImpl implements BookService {
         Book book = conversionService.convert(bookDto, Book.class);
         if (bookRepository.existsById(book.getId())) {
             log.info("{} is updated.", book);
+
             return conversionService.convert(bookRepository.save(book), BookDto.class);
         } else {
             throw new NotFoundException("Book with id " + bookDto.getId() + " not found");
@@ -103,7 +112,9 @@ public class BookServiceImpl implements BookService {
     public BookDto create(BookDto bookDto) {
         Book book = conversionService.convert(bookDto, Book.class);
         log.info("{} is added.", book);
-        return conversionService.convert(bookRepository.save(book), BookDto.class);
+        Book newBook = bookRepository.save(book);
+        BookDto returned = conversionService.convert(newBook, BookDto.class);
+        return returned;
 
     }
 

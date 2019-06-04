@@ -20,11 +20,15 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
 
-    @Autowired
     private UserRepository userRepository;
-    @Autowired
     private ConversionService conversionService;
 
+    @Autowired
+    public UserServiceImpl(ConversionService conversionService, UserRepository userRepository) {
+        this.conversionService = conversionService;
+        this.userRepository = userRepository;
+
+    }
     @Override
     public List<UserDto> findAll() {
         List<UserDto> userDtoList = new ArrayList<>();

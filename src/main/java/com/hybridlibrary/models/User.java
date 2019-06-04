@@ -51,13 +51,14 @@ public class User extends AbstractModel implements Serializable {
     private List<BookCopy> bookCopies;
 
     @Builder
-    public User(Long id, String firstName, String lastName, String email, String username, String password, List<BookCopy> bookCopies) {
+    public User(Long id, String firstName, String lastName, String email, String username, String password, String role, List<BookCopy> bookCopies) {
         super(id);
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.username = username;
         this.password = password;
+        this.role = role;
         this.bookCopies = bookCopies;
     }
 }

@@ -27,16 +27,23 @@ import java.util.List;
 @Slf4j
 public class BookCopyServiceImpl implements BookCopyService {
 
-    @Autowired
     private BookRentalRepository bookRentalRepository;
-    @Autowired
     private UserRepository userRepository;
-    @Autowired
     private BookCopyRepository bookCopyRepository;
-    @Autowired
     private BookRepository bookRepository;
-    @Autowired
     private ConversionService conversionService;
+
+    @Autowired
+    public BookCopyServiceImpl(BookRentalRepository bookRentalRepository, UserRepository userRepository,
+                               BookCopyRepository bookCopyRepository, ConversionService conversionService,
+                               BookRepository bookRepository){
+        this.bookCopyRepository = bookCopyRepository;
+        this.bookRentalRepository = bookRentalRepository;
+        this.userRepository = userRepository;
+        this.conversionService = conversionService;
+        this.bookRepository = bookRepository;
+
+    }
 
     public List<BookCopyDto> findAll() {
         List<BookCopyDto> bookCopyList = new ArrayList<>();
@@ -145,7 +152,7 @@ public class BookCopyServiceImpl implements BookCopyService {
     @Transactional
     @Override
     public BookCopyDto delete(Long id) {
-        if (bookRepository.existsById(id)) {
+        if (bookCopyRepository.existsById(id)) {
             BookCopy bookCopy = bookCopyRepository.getOne(id);
             bookRentalRepository.deleteByBookCopy(bookCopy);
             log.info("Book copy with id {} is deleted.", id);
