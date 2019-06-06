@@ -93,8 +93,6 @@ public class BookCopyServiceImplTest {
 
         verify(bookCopyRepositoryMock).findAll();
         verifyNoMoreInteractions(bookRepositoryMock, bookRentalRepositoryMock, userRepositoryMock, bookCopyRepositoryMock, conversionServiceMock);
-
-
     }
 
     @Test
@@ -144,7 +142,6 @@ public class BookCopyServiceImplTest {
         bookCopyService.getOne(-100L);
         verify(bookCopyRepositoryMock).existsById(-100L);
         verifyNoMoreInteractions(bookRepositoryMock, bookRentalRepositoryMock, userRepositoryMock, bookCopyRepositoryMock, conversionServiceMock);
-
     }
 
     @Test

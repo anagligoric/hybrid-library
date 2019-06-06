@@ -5,12 +5,14 @@ import com.hybridlibrary.models.Book;
 import com.hybridlibrary.repositories.BookRepository;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertNotNull;
 
+@Ignore
 public class BookRestControllerTest extends BaseRestControllerTest{
 
     @Autowired

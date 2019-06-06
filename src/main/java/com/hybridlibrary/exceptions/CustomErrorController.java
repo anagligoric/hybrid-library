@@ -27,8 +27,8 @@ public class CustomErrorController implements ErrorController {
                 errors.setStatus(HttpStatus.NOT_FOUND.value());
                 return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
             } else if (status.equals(HttpStatus.INTERNAL_SERVER_ERROR.value())){
-                errors.setStatus(HttpStatus.NOT_FOUND.value());
-                return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
+                errors.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+                return new ResponseEntity<>(errors, HttpStatus.INTERNAL_SERVER_ERROR);
             }else if (status.equals(HttpStatus.CONFLICT.value())) {
                 errors.setStatus(HttpStatus.CONFLICT.value());
                 return new ResponseEntity<>(errors, HttpStatus.CONFLICT);

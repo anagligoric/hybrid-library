@@ -11,6 +11,7 @@ import com.hybridlibrary.repositories.BookRentalRepository;
 import com.hybridlibrary.repositories.BookRepository;
 import com.hybridlibrary.repositories.UserRepository;
 import com.hybridlibrary.services.BookCopyService;
+import com.hybridlibrary.utils.ApplicationConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
@@ -36,7 +37,7 @@ public class BookCopyServiceImpl implements BookCopyService {
     @Autowired
     public BookCopyServiceImpl(BookRentalRepository bookRentalRepository, UserRepository userRepository,
                                BookCopyRepository bookCopyRepository, ConversionService conversionService,
-                               BookRepository bookRepository){
+                               BookRepository bookRepository) {
         this.bookCopyRepository = bookCopyRepository;
         this.bookRentalRepository = bookRentalRepository;
         this.userRepository = userRepository;
@@ -65,7 +66,7 @@ public class BookCopyServiceImpl implements BookCopyService {
             log.info("Book copy with id {} is listed.", id);
             return conversionService.convert(bookCopyRepository.getOne(id), BookCopyDto.class);
         } else {
-            throw new NotFoundException("Book copy with id " + id + " not found.");
+            throw new NotFoundException(ApplicationConstants.BOOK_COPY + id + ApplicationConstants.NOT_FOUND);
         }
 
     }
@@ -81,7 +82,7 @@ public class BookCopyServiceImpl implements BookCopyService {
         }
 
         if (CollectionUtils.isEmpty(bookCopyList)) {
-            throw new NotFoundException("Book copy for book with id " + id + " not found.");
+            throw new NotFoundException("Book copy for book with id " + id + ApplicationConstants.NOT_FOUND);
 
         } else {
             log.info("Copies of the book with id {} are listed.", id);
@@ -122,16 +123,15 @@ public class BookCopyServiceImpl implements BookCopyService {
             log.info("Book copy with id {} is updated.", oldBookCopy.getId());
             return conversionService.convert(bookCopyRepository.save(oldBookCopy), BookCopyDto.class);
         } else {
-            throw new NotFoundException("Book copy with id " + bookCopyDto.getId() + " not found.");
+            throw new NotFoundException(ApplicationConstants.BOOK_COPY + bookCopyDto.getId() + ApplicationConstants.NOT_FOUND);
         }
 
     }
 
     @Override
     public BookCopyDto create(BookCopyDto bookCopyDto) {
-        return null;
+        return new BookCopyDto();
     }
-
 
     @Override
     public BookCopyDto create(BookCopyDto bookCopyDto, Long bookId) {
@@ -159,7 +159,7 @@ public class BookCopyServiceImpl implements BookCopyService {
             bookCopyRepository.deleteById(id);
             return conversionService.convert(bookCopy, BookCopyDto.class);
         } else {
-            throw new NotFoundException("Book copy with id " + id + " not found.");
+            throw new NotFoundException(ApplicationConstants.BOOK_COPY + id + ApplicationConstants.NOT_FOUND);
         }
 
     }
@@ -176,9 +176,9 @@ public class BookCopyServiceImpl implements BookCopyService {
             return conversionService.convert(bookCopyRepository.findByBookAndId(book, id), BookCopyDto.class);
         } else {
             if (bookCopyRepository.existsById(id)) {
-                throw new NotFoundException("Book with id " + bookId + " not found.");
+                throw new NotFoundException(ApplicationConstants.BOOK + bookId + ApplicationConstants.NOT_FOUND);
             } else {
-                throw new NotFoundException("Book copy with id " + id + " not found.");
+                throw new NotFoundException(ApplicationConstants.BOOK_COPY + id + ApplicationConstants.NOT_FOUND);
             }
         }
     }

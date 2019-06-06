@@ -1,6 +1,5 @@
 package com.hybridlibrary.services.serviceimpl;
 
-import com.hybridlibrary.exceptions.NotFoundException;
 import com.hybridlibrary.models.User;
 import com.hybridlibrary.services.UserService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,7 +19,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws NotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         User user = userService.findByUsername(username);
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),

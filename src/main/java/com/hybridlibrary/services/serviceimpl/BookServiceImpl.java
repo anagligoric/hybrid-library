@@ -7,6 +7,7 @@ import com.hybridlibrary.repositories.BookCopyRepository;
 import com.hybridlibrary.repositories.BookRentalRepository;
 import com.hybridlibrary.repositories.BookRepository;
 import com.hybridlibrary.services.BookService;
+import com.hybridlibrary.utils.ApplicationConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
@@ -58,10 +59,9 @@ public class BookServiceImpl implements BookService {
         if (bookRepository.existsById(id)) {
             log.info("Book with id {} is listed", id);
             Book book = bookRepository.getOne(id);
-            BookDto bookDto = conversionService.convert(book, BookDto.class);
-            return bookDto;
+            return conversionService.convert(book, BookDto.class);
         } else {
-            throw new NotFoundException("Book with id " + id + " not found.");
+            throw new NotFoundException(ApplicationConstants.BOOK + id + ApplicationConstants.NOT_FOUND);
         }
     }
 
@@ -104,7 +104,7 @@ public class BookServiceImpl implements BookService {
 
             return conversionService.convert(bookRepository.save(book), BookDto.class);
         } else {
-            throw new NotFoundException("Book with id " + bookDto.getId() + " not found");
+            throw new NotFoundException(ApplicationConstants.BOOK + bookDto.getId() + ApplicationConstants.NOT_FOUND);
         }
     }
 
@@ -113,9 +113,7 @@ public class BookServiceImpl implements BookService {
         Book book = conversionService.convert(bookDto, Book.class);
         log.info("{} is added.", book);
         Book newBook = bookRepository.save(book);
-        BookDto returned = conversionService.convert(newBook, BookDto.class);
-        return returned;
-
+        return conversionService.convert(newBook, BookDto.class);
     }
 
     @Transactional
@@ -141,7 +139,7 @@ public class BookServiceImpl implements BookService {
                 throw new IllegalArgumentException("Book can not be deleted, it has rented copies");
             }
         } else {
-            throw new NotFoundException("Book with id " + id + " not found.");
+            throw new NotFoundException(ApplicationConstants.BOOK + id + ApplicationConstants.NOT_FOUND);
         }
 
     }

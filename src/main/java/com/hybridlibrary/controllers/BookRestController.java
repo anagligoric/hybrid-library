@@ -35,7 +35,7 @@ public class BookRestController {
         return ResponseEntity.ok(bookService.getByTitle(title));
     }
 
-    @RequestMapping(value = "/author/{author}", method = RequestMethod.GET)
+    @GetMapping("/author/{author}")
     public ResponseEntity<List<BookDto>> getByAuthor(@PathVariable("author") String author) {
         return ResponseEntity.ok(bookService.getByAuthor(author));
     }
