@@ -1,2 +1,2 @@
-insert into user (first_name, last_name, email, username, password, role) values ('Nicolais', 'Kiraly', 'nkiraly0@pcworld.com', 'nkiraly0', '$2a$10$6yOYfJPCpucGIOI9R4/vhuoSo8pwT855Qu.4q7wmcdsSEiWIgXMv2', 'ROLE_ADMIN');
+insert into user (first_name, last_name, email, username, password, role) values ('Nicolais', 'Kiraly', 'nkiraly0@pcworld.com', 'user', '$2a$10$6yOYfJPCpucGIOI9R4/vhuoSo8pwT855Qu.4q7wmcdsSEiWIgXMv2', 'ROLE_ADMIN');
 insert into user (first_name, last_name, email, username, password, role) values ('Cindra', 'Besant', 'cbesant1@army.mil', 'cbesant1', '$2a$10$6yOYfJPCpucGIOI9R4/vhuoSo8pwT855Qu.4q7wmcdsSEiWIgXMv2', 'ROLE_USER');

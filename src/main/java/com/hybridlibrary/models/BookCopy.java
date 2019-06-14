@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-@AllArgsConstructor
 public class BookCopy extends AbstractModel implements Serializable {
 
     @NotNull

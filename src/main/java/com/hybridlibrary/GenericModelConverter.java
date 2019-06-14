@@ -128,6 +128,7 @@ public class GenericModelConverter implements GenericConverter {
                 .lastName(user.getLastName())
                 .email(user.getEmail())
                 .username(user.getUsername())
+                .role(user.getRole())
                 .build();
 
     }
@@ -140,6 +141,7 @@ public class GenericModelConverter implements GenericConverter {
                 .lastName(userDto.getLastName())
                 .email(userDto.getEmail())
                 .username(userDto.getUsername())
+                .role(userDto.getRole())
                 .build();
     }
 }

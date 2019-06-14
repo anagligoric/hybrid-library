@@ -3,8 +3,6 @@ package com.hybridlibrary.models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
-
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,8 +11,8 @@ import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public abstract class AbstractModel {
 
     @Id

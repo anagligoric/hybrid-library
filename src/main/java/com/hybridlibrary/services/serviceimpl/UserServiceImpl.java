@@ -5,6 +5,7 @@ import com.hybridlibrary.exceptions.NotFoundException;
 import com.hybridlibrary.models.User;
 import com.hybridlibrary.repositories.UserRepository;
 import com.hybridlibrary.services.UserService;
+import com.hybridlibrary.utils.ApplicationConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
@@ -20,10 +21,15 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
 
-    @Autowired
     private UserRepository userRepository;
-    @Autowired
     private ConversionService conversionService;
+
+    @Autowired
+    public UserServiceImpl(ConversionService conversionService, UserRepository userRepository) {
+        this.conversionService = conversionService;
+        this.userRepository = userRepository;
+
+    }
 
     @Override
     public List<UserDto> findAll() {
@@ -46,7 +52,7 @@ public class UserServiceImpl implements UserService {
             log.info("User with id {} is listed", id);
             return conversionService.convert(userRepository.getOne(id), UserDto.class);
         } else {
-            throw new NotFoundException("User with id " + id + " not found");
+            throw new NotFoundException(ApplicationConstants.USER + id + ApplicationConstants.NOT_FOUND);
         }
     }
 
@@ -104,7 +110,7 @@ public class UserServiceImpl implements UserService {
             userRepository.deleteById(id);
             return conversionService.convert(user, UserDto.class);
         } else {
-            throw new NotFoundException("User with id " + id + " not found.");
+            throw new NotFoundException(ApplicationConstants.USER + id + ApplicationConstants.NOT_FOUND);
         }
 
     }
@@ -116,14 +122,14 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public UserDto createPassword(Long id, String password) {
-        User user = userRepository.getOne(id);
         if (userRepository.existsById(id)) {
+            User user = userRepository.getOne(id);
             user.setPassword(password);
             UserDto userDto = conversionService.convert(user, UserDto.class);
             userRepository.executeUpdate(password, id);
             return userDto;
         } else {
-            throw new NotFoundException("User with id " + id + " not found.");
+            throw new NotFoundException(ApplicationConstants.USER + id + ApplicationConstants.NOT_FOUND);
         }
     }
 }

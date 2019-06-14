@@ -1,13 +1,10 @@
 package com.hybridlibrary.exceptions;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -30,8 +27,8 @@ public class CustomErrorController implements ErrorController {
                 errors.setStatus(HttpStatus.NOT_FOUND.value());
                 return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
             } else if (status.equals(HttpStatus.INTERNAL_SERVER_ERROR.value())){
-                errors.setStatus(HttpStatus.NOT_FOUND.value());
-                return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
+                errors.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+                return new ResponseEntity<>(errors, HttpStatus.INTERNAL_SERVER_ERROR);
             }else if (status.equals(HttpStatus.CONFLICT.value())) {
                 errors.setStatus(HttpStatus.CONFLICT.value());
                 return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
